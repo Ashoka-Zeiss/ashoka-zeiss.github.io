@@ -166,7 +166,7 @@
       opacity: 1;
     }
 
-    /* Week Navigation */
+    /* Week Navigation with Stats */
     .week-nav {
       display: flex;
       align-items: center;
@@ -175,6 +175,38 @@
       background-color: var(--color-surface);
       padding: var(--space-md);
       border-radius: var(--border-radius);
+      position: relative;
+    }
+
+    .week-nav__info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+
+    .week-nav__current {
+      font-weight: 500;
+      color: var(--color-text-primary);
+    }
+
+    .week-nav__stats {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      display: flex;
+      gap: var(--space-md);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .stat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: currentColor;
     }
 
     .week-nav__controls {
@@ -318,18 +350,81 @@
       }
     }
 
-    /* Day Column */
+    /* Day Column with Time Indicators */
     .day-column {
       background-color: var(--color-surface);
       border-radius: var(--border-radius);
       padding: var(--space-md);
       min-width: 200px;
+      position: relative;
     }
 
+    /* Current Time Indicator */
+    .time-indicator {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--color-accent);
+      box-shadow: 0 0 10px rgba(0, 217, 217, 0.5);
+      z-index: 10;
+      pointer-events: none;
+      display: none;
+    }
+
+    .time-indicator::before {
+      content: '';
+      position: absolute;
+      left: -8px;
+      top: -4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(0, 217, 217, 0.2);
+    }
+
+    .time-indicator-label {
+      position: absolute;
+      right: 8px;
+      top: -20px;
+      font-size: 0.625rem;
+      font-weight: 600;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .day-column.has-current-time .time-indicator {
+      display: block;
+    }
+
+    /* Session Density Indicator */
     .day-header {
       margin-bottom: var(--space-md);
       padding-bottom: var(--space-sm);
       border-bottom: 1px solid var(--color-border);
+      position: relative;
+    }
+
+    .session-density {
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: flex;
+      gap: 2px;
+    }
+
+    .density-bar {
+      width: 3px;
+      height: 20px;
+      background-color: var(--color-border);
+      border-radius: 2px;
+      transition: background-color 200ms ease;
+    }
+
+    .density-bar.filled {
+      background-color: var(--color-accent);
     }
 
     .day-name {
@@ -483,12 +578,17 @@
       margin-top: var(--space-md);
       padding-top: var(--space-md);
       border-top: 1px solid var(--color-border);
-      display: none;
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 300ms ease-out;
+    }
+
+    .session-details-inner {
+      overflow: hidden;
     }
 
     .session-card.expanded .session-details {
-      display: block;
-      animation: fadeIn var(--transition-base);
+      grid-template-rows: 1fr;
     }
 
     .session-location {
@@ -520,6 +620,88 @@
         opacity: 1;
         transform: translateY(0);
       }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* Stagger animation for cards */
+    .session-card {
+      animation: slideIn 400ms ease-out backwards;
+    }
+
+    .session-card:nth-child(1) {
+      animation-delay: 0ms;
+    }
+
+    .session-card:nth-child(2) {
+      animation-delay: 50ms;
+    }
+
+    .session-card:nth-child(3) {
+      animation-delay: 100ms;
+    }
+
+    .session-card:nth-child(4) {
+      animation-delay: 150ms;
+    }
+
+    .session-card:nth-child(5) {
+      animation-delay: 200ms;
+    }
+
+    /* Day column stagger */
+    .day-column {
+      animation: scaleIn 300ms ease-out backwards;
+    }
+
+    .day-column:nth-child(1) {
+      animation-delay: 0ms;
+    }
+
+    .day-column:nth-child(2) {
+      animation-delay: 50ms;
+    }
+
+    .day-column:nth-child(3) {
+      animation-delay: 100ms;
+    }
+
+    .day-column:nth-child(4) {
+      animation-delay: 150ms;
+    }
+
+    .day-column:nth-child(5) {
+      animation-delay: 200ms;
+    }
+
+    .day-column:nth-child(6) {
+      animation-delay: 250ms;
+    }
+
+    .day-column:nth-child(7) {
+      animation-delay: 300ms;
     }
 
     /* Loading State */
@@ -603,8 +785,9 @@
     </header>
 
     <nav class="week-nav" role="navigation" aria-label="Week navigation">
-      <div class="week-nav__current" id="currentWeek">
-        Loading...
+      <div class="week-nav__info" id="currentWeek">
+        <div class="week-nav__current">Loading...</div>
+        <div class="week-nav__stats"></div>
       </div>
       <div class="week-nav__controls">
         <button class="week-nav__button" id="prevWeek" aria-label="Previous week">
@@ -648,6 +831,118 @@
   </div>
 
   <script>
+    // Sample JSON data structure (in production, this would be in a separate file)
+    const CONFERENCE_DATA = {
+      "metadata": {
+        "conferenceStart": "2025-05-15",
+        "conferenceEnd": "2025-06-30",
+        "timezone": "America/New_York",
+        "defaultSessionDuration": 90,
+        "timeSlots": ["10:00", "11:30", "22:00", "22:00"]
+      },
+      "instructors": {
+        "sarah-chen": {
+          "id": "sarah-chen",
+          "name": "Dr. Sarah Chen",
+          "title": "Principal Investigator",
+          "specialization": "Confocal Microscopy",
+          "email": "s.chen@institute.edu"
+        },
+        "james-wilson": {
+          "id": "james-wilson",
+          "name": "Prof. James Wilson",
+          "title": "Director of Imaging Core",
+          "specialization": "Two-Photon Microscopy"
+        },
+        "maria-garcia": {
+          "id": "maria-garcia",
+          "name": "Maria Garcia",
+          "title": "Lab Manager",
+          "specialization": "Sample Preparation"
+        },
+        "alex-thompson": {
+          "id": "alex-thompson",
+          "name": "Dr. Alex Thompson",
+          "title": "Computational Biologist",
+          "specialization": "Image Analysis"
+        }
+      },
+      "sessionTemplates": [
+        {
+          "id": "confocal-basics",
+          "title": "Confocal Microscopy Fundamentals",
+          "category": "campus",
+          "labType": "theory",
+          "capacity": 30,
+          "duration": 120,
+          "prerequisites": null,
+          "equipment": ["Zeiss LSM 980"],
+          "description": "Introduction to confocal microscopy principles, including point scanning, optical sectioning, and fluorescence basics."
+        },
+        {
+          "id": "two-photon-workshop",
+          "title": "Two-Photon Imaging Workshop",
+          "category": "campus",
+          "labType": "wet-lab",
+          "capacity": 8,
+          "duration": 180,
+          "prerequisites": "confocal-basics",
+          "equipment": ["Bruker Ultima 2P"],
+          "description": "Hands-on training with two-photon microscopy for deep tissue imaging. Includes live sample preparation."
+        },
+        {
+          "id": "image-analysis",
+          "title": "Image Analysis with ImageJ/FIJI",
+          "category": "online",
+          "labType": "computational",
+          "capacity": 50,
+          "duration": 90,
+          "prerequisites": null,
+          "equipment": [],
+          "description": "Comprehensive workshop on image processing, quantification, and batch analysis using open-source tools."
+        }
+      ],
+      "schedule": []
+    };
+
+    // Generate schedule based on templates
+    const generateSchedule = () => {
+      const schedule = [];
+      const start = new Date(CONFERENCE_DATA.metadata.conferenceStart);
+      const end = new Date(CONFERENCE_DATA.metadata.conferenceEnd);
+      const templates = CONFERENCE_DATA.sessionTemplates;
+      const instructorIds = Object.keys(CONFERENCE_DATA.instructors);
+
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        // Skip weekends
+        if (d.getDay() === 0 || d.getDay() === 6) continue;
+
+        // 2-4 sessions per day
+        const sessionsPerDay = Math.floor(Math.random() * 3) + 2;
+        const daySlots = [...CONFERENCE_DATA.metadata.timeSlots];
+
+        for (let i = 0; i < sessionsPerDay && i < daySlots.length; i++) {
+          const template = templates[Math.floor(Math.random() * templates.length)];
+          const instructor = instructorIds[Math.floor(Math.random() * instructorIds.length)];
+          const timeSlot = daySlots[i];
+
+          schedule.push({
+            id: `session-${d.toISOString().split('T')[0]}-${i}`,
+            date: d.toISOString().split('T')[0],
+            startTime: timeSlot,
+            templateId: template.id,
+            instructorId: instructor,
+            enrolled: Math.floor(Math.random() * template.capacity * 0.8)
+          });
+        }
+      }
+
+      return schedule;
+    };
+
+    // Set the schedule
+    CONFERENCE_DATA.schedule = generateSchedule();
+
     // Namespace for our application
     const ConferenceSchedule = (() => {
       'use strict';
@@ -659,69 +954,68 @@
         filteredSessions: [],
         activeFilters: new Set(['online', 'campus', 'offcampus']),
         searchQuery: '',
-        expandedSessions: new Set()
+        expandedSessions: new Set(),
+        conferenceData: null
       };
 
       // Constants
       const DAYS_IN_WEEK = 7;
-      const CONFERENCE_START = new Date('2024-03-01');
-      const CONFERENCE_END = new Date('2024-04-30');
+      let CONFERENCE_START;
+      let CONFERENCE_END;
 
-      // Sample data generator (replace with JSON fetch in production)
-      const generateSampleSessions = () => {
-        const sessions = [];
-        const sessionTemplates = [
-          {title: 'Confocal Microscopy Fundamentals', instructor: 'Dr. Sarah Chen', category: 'online', labType: 'theory', capacity: 30},
-          {title: 'Two-Photon Imaging Workshop', instructor: 'Prof. James Wilson', category: 'campus', labType: 'wet-lab', capacity: 8},
-          {title: 'Sample Preparation Techniques', instructor: 'Lab Manager Maria Garcia', category: 'campus', labType: 'wet-lab', capacity: 12},
-          {title: 'Image Analysis with ImageJ/FIJI', instructor: 'Dr. Alex Thompson', category: 'online', labType: 'computational', capacity: 50},
-          {title: 'Live Cell Imaging Methods', instructor: 'Dr. David Kim', category: 'campus', labType: 'wet-lab', capacity: 6},
-          {title: 'STED Super-Resolution Imaging', instructor: 'Application Specialist Priya Patel', category: 'offcampus', labType: 'dry-lab', capacity: 10},
-          {title: 'Fluorescence Lifetime Imaging', instructor: 'Dr. Robert Liu', category: 'campus', labType: 'dry-lab', capacity: 8},
-          {title: 'Multi-Photon Microscopy Applications', instructor: 'Prof. Jennifer Walsh', category: 'offcampus', labType: 'dry-lab', capacity: 10}
-        ];
+      // Data loading and parsing
+      const loadConferenceData = async () => {
+        try {
+          // In production, this would be: const response = await fetch('./data/conference.json');
+          // For now, we'll use the embedded data
+          state.conferenceData = CONFERENCE_DATA;
 
-        const timeSlots = ['10:00', '11:30', '14:00', '15:30'];
+          // Set conference dates
+          CONFERENCE_START = new Date(state.conferenceData.metadata.conferenceStart);
+          CONFERENCE_END = new Date(state.conferenceData.metadata.conferenceEnd);
 
-        // Generate sessions for 60 days
-        for (let day = 0; day < 60; day++) {
-          const date = new Date(CONFERENCE_START);
-          date.setDate(date.getDate() + day);
+          // Parse sessions
+          state.sessions = state.conferenceData.schedule.map(scheduleItem => {
+            const template = state.conferenceData.sessionTemplates.find(t => t.id === scheduleItem.templateId);
+            const instructor = state.conferenceData.instructors[scheduleItem.instructorId];
 
-          // 2-4 sessions per day
-          const sessionsPerDay = Math.floor(Math.random() * 3) + 2;
-
-          for (let i = 0; i < sessionsPerDay; i++) {
-            const template = sessionTemplates[Math.floor(Math.random() * sessionTemplates.length)];
-            const timeSlot = timeSlots[i] || timeSlots[0];
-
-            sessions.push({
-              id: `session-${day}-${i}`,
-              date: date.toISOString().split('T')[0],
-              startTime: timeSlot,
-              endTime: addHours(timeSlot, 1.5),
+            return {
+              id: scheduleItem.id,
+              date: scheduleItem.date,
+              startTime: scheduleItem.startTime,
+              endTime: addMinutes(scheduleItem.startTime, template.duration),
               title: template.title,
-              instructor: template.instructor,
+              instructor: instructor.name,
+              instructorTitle: instructor.title,
               category: template.category,
               labType: template.labType,
               capacity: template.capacity,
-              enrolled: Math.floor(Math.random() * template.capacity * 0.8),
-              prerequisites: template.labType === 'wet-lab' ? 'Basic Lab Safety Training' : null,
-              description: `This hands-on session covers ${template.title.toLowerCase()}. Participants will gain practical experience with equipment and techniques used in modern microscopy research.`,
-              location: template.category === 'online' ? 'Zoom Room A' :
-                template.category === 'campus' ? (template.labType === 'wet-lab' ? 'Building 3, Imaging Core' : 'Building 2, Computer Lab') :
-                  'Partner Institute, Room 201'
-            });
-          }
-        }
+              enrolled: scheduleItem.enrolled,
+              prerequisites: template.prerequisites,
+              description: template.description,
+              location: getLocation(template)
+            };
+          });
 
-        return sessions;
+          return true;
+        } catch (error) {
+          console.error('Failed to load conference data:', error);
+          return false;
+        }
+      };
+
+      const getLocation = (template) => {
+        if (template.category === 'online') return 'Zoom Room A';
+        if (template.category === 'campus') {
+          return template.labType === 'wet-lab' ? 'Building 3, Imaging Core' : 'Building 2, Computer Lab';
+        }
+        return 'Partner Institute, Room 201';
       };
 
       // Utility functions
-      const addHours = (time, hours) => {
+      const addMinutes = (time, minutes) => {
         const [h, m] = time.split(':').map(Number);
-        const totalMinutes = h * 60 + m + hours * 60;
+        const totalMinutes = h * 60 + m + minutes;
         const newHours = Math.floor(totalMinutes / 60);
         const newMinutes = totalMinutes % 60;
         return `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
@@ -784,27 +1078,78 @@
         // Clear existing content
         weekGrid.innerHTML = '';
 
+        // Calculate stats for the week
+        const weekStats = calculateWeekStats(weekDates);
+
+        // Update week navigation with stats
+        updateWeekNavigation(weekStats);
+
         // Render each day
-        weekDates.forEach(date => {
+        weekDates.forEach((date, index) => {
           const dayColumn = createDayColumn(date);
           weekGrid.appendChild(dayColumn);
         });
 
-        // Update week navigation text
-        const currentWeekEl = document.getElementById('currentWeek');
-        const weekEndDate = new Date(state.currentWeekStart);
-        weekEndDate.setDate(weekEndDate.getDate() + 6);
-        currentWeekEl.textContent = `${formatDate(state.currentWeekStart).split(',')[1].trim()} - ${formatDate(weekEndDate).split(',')[1].trim()}`;
+        // Update current time indicator
+        updateTimeIndicator();
 
         // Update navigation buttons
         updateNavigationButtons();
+      };
+
+      const calculateWeekStats = (weekDates) => {
+        const stats = {
+          total: 0,
+          byCategory: {online: 0, campus: 0, offcampus: 0}
+        };
+
+        weekDates.forEach(date => {
+          const dateStr = date.toISOString().split('T')[0];
+          const daySessions = state.filteredSessions.filter(s => s.date === dateStr);
+
+          stats.total += daySessions.length;
+          daySessions.forEach(session => {
+            stats.byCategory[session.category]++;
+          });
+        });
+
+        return stats;
+      };
+
+      const updateWeekNavigation = (stats) => {
+        const currentWeekEl = document.getElementById('currentWeek');
+        const weekEndDate = new Date(state.currentWeekStart);
+        weekEndDate.setDate(weekEndDate.getDate() + 6);
+
+        currentWeekEl.innerHTML = `
+                    <div class="week-nav__current">
+                        ${formatDate(state.currentWeekStart).split(',')[1].trim()} - ${formatDate(weekEndDate).split(',')[1].trim()}
+                    </div>
+                    <div class="week-nav__stats">
+                        <div class="stat-item">
+                            <span>${stats.total} sessions</span>
+                        </div>
+                        <div class="stat-item" style="color: var(--color-online)">
+                            <span class="stat-dot"></span>
+                            <span>${stats.byCategory.online}</span>
+                        </div>
+                        <div class="stat-item" style="color: var(--color-campus)">
+                            <span class="stat-dot"></span>
+                            <span>${stats.byCategory.campus}</span>
+                        </div>
+                        <div class="stat-item" style="color: var(--color-offcampus)">
+                            <span class="stat-dot"></span>
+                            <span>${stats.byCategory.offcampus}</span>
+                        </div>
+                    </div>
+                `;
       };
 
       const createDayColumn = (date) => {
         const dayColumn = document.createElement('div');
         dayColumn.className = `day-column ${isToday(date) ? 'today' : ''}`;
 
-        // Day header
+        // Day header with density indicator
         const dayHeader = document.createElement('div');
         dayHeader.className = 'day-header';
 
@@ -816,19 +1161,22 @@
         dayDate.className = 'day-date';
         dayDate.textContent = date.getDate();
 
+        // Session density indicator
+        const dateStr = date.toISOString().split('T')[0];
+        const daySessions = state.filteredSessions
+          .filter(session => session.date === dateStr)
+          .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+        const densityIndicator = createDensityIndicator(daySessions.length);
+
         dayHeader.appendChild(dayName);
         dayHeader.appendChild(dayDate);
+        dayHeader.appendChild(densityIndicator);
         dayColumn.appendChild(dayHeader);
 
         // Session list
         const sessionList = document.createElement('div');
         sessionList.className = 'session-list';
-
-        // Get sessions for this day
-        const dateStr = date.toISOString().split('T')[0];
-        const daySessions = state.filteredSessions
-          .filter(session => session.date === dateStr)
-          .sort((a, b) => a.startTime.localeCompare(b.startTime));
 
         if (daySessions.length === 0) {
           const emptyState = document.createElement('div');
@@ -836,14 +1184,96 @@
           emptyState.textContent = 'No sessions';
           sessionList.appendChild(emptyState);
         } else {
-          daySessions.forEach(session => {
-            const sessionCard = createSessionCard(session);
-            sessionList.appendChild(sessionCard);
+          // Group sessions by time blocks
+          const timeBlocks = groupSessionsByTimeBlock(daySessions);
+
+          Object.entries(timeBlocks).forEach(([time, sessions]) => {
+            sessions.forEach(session => {
+              const sessionCard = createSessionCard(session);
+              sessionList.appendChild(sessionCard);
+            });
           });
         }
 
         dayColumn.appendChild(sessionList);
+
+        // Add time indicator if today
+        if (isToday(date)) {
+          const timeIndicator = createTimeIndicator();
+          dayColumn.appendChild(timeIndicator);
+          dayColumn.classList.add('has-current-time');
+        }
+
         return dayColumn;
+      };
+
+      const createDensityIndicator = (sessionCount) => {
+        const densityContainer = document.createElement('div');
+        densityContainer.className = 'session-density';
+
+        const maxBars = 4;
+        const filledBars = Math.min(sessionCount, maxBars);
+
+        for (let i = 0; i < maxBars; i++) {
+          const bar = document.createElement('div');
+          bar.className = `density-bar ${i < filledBars ? 'filled' : ''}`;
+          densityContainer.appendChild(bar);
+        }
+
+        return densityContainer;
+      };
+
+      const createTimeIndicator = () => {
+        const indicator = document.createElement('div');
+        indicator.className = 'time-indicator';
+
+        const label = document.createElement('div');
+        label.className = 'time-indicator-label';
+        label.textContent = 'NOW';
+
+        indicator.appendChild(label);
+        return indicator;
+      };
+
+      const groupSessionsByTimeBlock = (sessions) => {
+        const blocks = {};
+        sessions.forEach(session => {
+          const hour = parseInt(session.startTime.split(':')[0]);
+          const block = hour < 12 ? 'morning' : 'afternoon';
+
+          if (!blocks[block]) blocks[block] = [];
+          blocks[block].push(session);
+        });
+        return blocks;
+      };
+
+      const updateTimeIndicator = () => {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinutes = now.getMinutes();
+
+        // Only show during conference hours (10am - 5pm)
+        if (currentHour < 10 || currentHour >= 17) return;
+
+        const todayColumn = document.querySelector('.day-column.today');
+        if (!todayColumn) return;
+
+        const indicator = todayColumn.querySelector('.time-indicator');
+        if (!indicator) return;
+
+        // Calculate position based on conference hours
+        const startHour = 10;
+        const endHour = 17;
+        const totalMinutes = (endHour - startHour) * 60;
+        const currentMinutesFromStart = ((currentHour - startHour) * 60) + currentMinutes;
+        const percentage = (currentMinutesFromStart / totalMinutes) * 100;
+
+        // Position the indicator
+        const headerHeight = todayColumn.querySelector('.day-header').offsetHeight;
+        const sessionListHeight = todayColumn.querySelector('.session-list').offsetHeight;
+        const topPosition = headerHeight + (sessionListHeight * percentage / 100);
+
+        indicator.style.top = `${topPosition}px`;
       };
 
       const createSessionCard = (session) => {
@@ -892,24 +1322,28 @@
         const details = document.createElement('div');
         details.className = 'session-details';
 
+        const detailsInner = document.createElement('div');
+        detailsInner.className = 'session-details-inner';
+
         const location = document.createElement('div');
         location.className = 'session-location';
         location.textContent = `📍 ${session.location}`;
 
-        details.appendChild(location);
+        detailsInner.appendChild(location);
 
         if (session.prerequisites) {
           const prerequisites = document.createElement('div');
           prerequisites.className = 'session-prerequisites';
           prerequisites.textContent = `⚠️ Requires: ${session.prerequisites}`;
-          details.appendChild(prerequisites);
+          detailsInner.appendChild(prerequisites);
         }
 
         const description = document.createElement('p');
         description.className = 'session-description';
         description.textContent = session.description;
 
-        details.appendChild(description);
+        detailsInner.appendChild(description);
+        details.appendChild(detailsInner);
         card.appendChild(details);
 
         // Event listeners
@@ -984,13 +1418,21 @@
       };
 
       // Initialize
-      const init = () => {
+      const init = async () => {
         // Set initial theme
         const savedTheme = localStorage.getItem('theme') || 'dark';
         document.documentElement.setAttribute('data-theme', savedTheme);
 
-        // Load sessions (in production, fetch from JSON)
-        state.sessions = generateSampleSessions();
+        // Show loading state
+        const weekGrid = document.getElementById('weekGrid');
+        weekGrid.innerHTML = '<div class="loading">Loading schedule...</div>';
+
+        // Load conference data
+        const dataLoaded = await loadConferenceData();
+        if (!dataLoaded) {
+          weekGrid.innerHTML = '<div class="empty-state">Failed to load schedule. Please refresh the page.</div>';
+          return;
+        }
 
         // Set initial week
         const today = new Date();
@@ -1038,6 +1480,9 @@
 
         // Render initial view
         renderWeek();
+
+        // Update time indicator every minute
+        setInterval(updateTimeIndicator, 60000);
       };
 
       // Public API
