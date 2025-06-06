@@ -8,28 +8,28 @@
   <style>
     /* CSS Reset and Custom Properties */
     :root {
-      /* Color System - Psychology-based */
-      --color-bg: #1a1a1a;
-      --color-surface: #242424;
-      --color-surface-hover: #2a2a2a;
-      --color-text-primary: #ffffff;
-      --color-text-secondary: #a0a0a0;
-      --color-text-muted: #6b6b6b;
+      /* Light mode colors */
+      --color-bg: #ffffff;
+      --color-surface: #f8f9fa;
+      --color-surface-hover: #e9ecef;
+      --color-text-primary: #212529;
+      --color-text-secondary: #6c757d;
+      --color-text-muted: #adb5bd;
 
       /* Category Colors */
-      --color-online: #00D9D9;
-      --color-campus: #FFB000;
-      --color-offcampus: #8B5CF6;
+      --color-online: #0096c7;
+      --color-campus: #f77f00;
+      --color-offcampus: #7209b7;
 
       /* Lab Type Colors - Subtle accents */
-      --color-theory: #4ECDC4;
-      --color-wet-lab: #FF6B6B;
-      --color-dry-lab: #4DABF7;
-      --color-computational: #51CF66;
+      --color-theory: #06ffa5;
+      --color-wet-lab: #ff006e;
+      --color-dry-lab: #0582ca;
+      --color-computational: #06ffa5;
 
       /* UI Colors */
-      --color-border: #333333;
-      --color-accent: #00D9D9;
+      --color-border: #dee2e6;
+      --color-accent: #0096c7;
 
       /* Typography - Following Butterick's Principles */
       --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
@@ -51,6 +51,31 @@
       --transition-base: 150ms ease-in-out;
     }
 
+    /* Dark mode */
+    [data-theme="dark"] {
+      --color-bg: #1a1a1a;
+      --color-surface: #242424;
+      --color-surface-hover: #2a2a2a;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #a0a0a0;
+      --color-text-muted: #6b6b6b;
+
+      /* Category Colors */
+      --color-online: #00D9D9;
+      --color-campus: #FFB000;
+      --color-offcampus: #8B5CF6;
+
+      /* Lab Type Colors */
+      --color-theory: #4ECDC4;
+      --color-wet-lab: #FF6B6B;
+      --color-dry-lab: #4DABF7;
+      --color-computational: #51CF66;
+
+      /* UI Colors */
+      --color-border: #333333;
+      --color-accent: #00D9D9;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -65,6 +90,7 @@
       color: var(--color-text-primary);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      transition: background-color var(--transition-base), color var(--transition-base);
     }
 
     /* Container and Layout */
@@ -77,13 +103,67 @@
     /* Header */
     .header {
       margin-bottom: var(--space-xl);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .header h1 {
       font-size: 1.75rem;
       font-weight: 600;
       line-height: var(--line-height-heading);
-      margin-bottom: var(--space-md);
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-primary);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-base);
+      position: relative;
+    }
+
+    .theme-toggle:hover {
+      background-color: var(--color-surface-hover);
+      border-color: var(--color-accent);
+    }
+
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      transition: transform var(--transition-base);
+    }
+
+    .theme-toggle:hover svg {
+      transform: rotate(180deg);
+    }
+
+    .theme-icon {
+      position: absolute;
+      transition: opacity var(--transition-base);
+    }
+
+    .theme-icon.sun {
+      opacity: 1;
+    }
+
+    .theme-icon.moon {
+      opacity: 0;
+    }
+
+    [data-theme="dark"] .theme-icon.sun {
+      opacity: 0;
+    }
+
+    [data-theme="dark"] .theme-icon.moon {
+      opacity: 1;
     }
 
     /* Week Navigation */
@@ -462,6 +542,18 @@
         padding: var(--space-sm);
       }
 
+      .header {
+        flex-direction: column;
+        gap: var(--space-md);
+        align-items: flex-start;
+      }
+
+      .theme-toggle {
+        position: absolute;
+        top: var(--space-md);
+        right: var(--space-md);
+      }
+
       .week-nav {
         flex-direction: column;
         gap: var(--space-md);
@@ -499,6 +591,15 @@
   <div class="container">
     <header class="header">
       <h1>Advanced Microscopy Training Schedule</h1>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+        <svg class="theme-icon sun" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" />
+        </svg>
+        <svg class="theme-icon moon" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+        </svg>
+      </button>
     </header>
 
     <nav class="week-nav" role="navigation" aria-label="Week navigation">
@@ -884,6 +985,10 @@
 
       // Initialize
       const init = () => {
+        // Set initial theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
         // Load sessions (in production, fetch from JSON)
         state.sessions = generateSampleSessions();
 
@@ -902,6 +1007,14 @@
         document.getElementById('prevWeek').addEventListener('click', () => handleWeekNavigation(-1));
         document.getElementById('nextWeek').addEventListener('click', () => handleWeekNavigation(1));
         document.getElementById('todayButton').addEventListener('click', handleTodayButton);
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
 
         // Filter buttons
         document.querySelectorAll('.filter-button').forEach(button => {
