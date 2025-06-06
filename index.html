@@ -571,11 +571,34 @@
       margin-bottom: var(--space-xl);
     }
 
+    .week-grid.three-day-view {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .week-grid.three-day-view .day-column {
+      min-width: unset;
+    }
+
+    @media (max-width: 767px) {
+      .week-grid.three-day-view {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (min-width: 768px) {
       .week-grid {
         grid-template-columns: repeat(7, 1fr);
         overflow-x: auto;
         padding-bottom: var(--space-sm);
+      }
+
+      .week-grid.three-day-view {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--space-md);
+      }
+
+      .week-grid.three-day-view .day-column {
+        min-width: unset;
       }
     }
 
@@ -1321,6 +1344,7 @@
       // DOM manipulation
       const renderWeek = () => {
         const weekGrid = document.getElementById('weekGrid');
+        weekGrid.className = 'week-grid'; // Reset to just week-grid
         const weekDates = getWeekDates(state.currentWeekStart);
 
         // Clear existing content
@@ -1517,7 +1541,7 @@
 
       const render3Day = () => {
         const weekGrid = document.getElementById('weekGrid');
-        weekGrid.className = 'week-grid';
+        weekGrid.className = 'week-grid three-day-view';
         weekGrid.innerHTML = '';
 
         const today = new Date();
