@@ -630,6 +630,7 @@
       z-index: 10;
       pointer-events: none;
       display: none;
+      transition: top 200ms ease-out;
     }
 
     .time-indicator::before {
@@ -781,6 +782,46 @@
       background-color: var(--color-surface-hover);
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Current session - Google Material style */
+    .session-card.current-session {
+      background-color: var(--color-surface);
+      border: 1px solid transparent;
+      box-shadow: 0 0 0 2px var(--color-accent);
+    }
+
+    /* Red recording dot next to time */
+    .session-card.current-session .session-time::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background-color: #f44336;
+      border-radius: 50%;
+      margin-right: 6px;
+      box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.3);
+      animation: recordingDot 1.5s ease-in-out infinite;
+    }
+
+    @keyframes recordingDot {
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.3);
+      }
+
+      50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 0 4px rgba(244, 67, 54, 0.1);
+      }
+    }
+
+    /* Subtle text color change */
+    .session-card.current-session .session-time {
+      color: var(--color-accent);
+      font-weight: 600;
     }
 
     .session-card.expanded {
@@ -1116,7 +1157,7 @@
         "conferenceEnd": "2025-06-30",
         "timezone": "America/New_York",
         "defaultSessionDuration": 90,
-        "timeSlots": ["10:00", "11:30", "22:00", "22:00"]
+        "timeSlots": ["00:00", "01:30", "03:00", "04:30"]
       },
       "instructors": {
         "sarah-chen": {
@@ -1406,10 +1447,12 @@
             renderWeek();
           // Stats are calculated within renderWeek
         }
-        updateTimeContext();
 
-        // Ensure navigation buttons are updated
-        updateNavigationButtons();
+        // Update indicators
+        updateTimeContext();
+        updateNavigationButtons();    // Ensure navigation buttons are updated
+        updateTimeIndicator();
+        highlightCurrentSession();
       };
 
       const renderMonth = () => {
@@ -1786,19 +1829,109 @@
         const indicator = todayColumn.querySelector('.time-indicator');
         if (!indicator) return;
 
-        // Calculate position based on conference hours
-        const startHour = 10;
-        const endHour = 17;
-        const totalMinutes = (endHour - startHour) * 60;
-        const currentMinutesFromStart = ((currentHour - startHour) * 60) + currentMinutes;
-        const percentage = (currentMinutesFromStart / totalMinutes) * 100;
+        // Get all session cards in today's column
+        const sessionCards = todayColumn.querySelectorAll('.session-card');
+        if (sessionCards.length === 0) return;
+
+        // Find the header and session list elements
+        const dayHeader = todayColumn.querySelector('.day-header');
+        const sessionList = todayColumn.querySelector('.session-list');
+
+        if (!dayHeader || !sessionList) return;
+
+        // Get today's sessions to find the time range
+        const todayStr = now.toISOString().split('T')[0];
+        const todaySessions = state.filteredSessions
+          .filter(s => s.date === todayStr)
+          .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+        if (todaySessions.length === 0) return;
+
+        // Find the earliest and latest times from actual sessions
+        const firstSessionTime = todaySessions[0].startTime;
+        const lastSession = todaySessions[todaySessions.length - 1];
+        const lastSessionEndTime = lastSession.endTime;
+
+        // Parse times
+        const [firstHour, firstMin] = firstSessionTime.split(':').map(Number);
+        const [lastHour, lastMin] = lastSessionEndTime.split(':').map(Number);
+
+        // Calculate total minutes span of the day's sessions
+        const dayStartMinutes = firstHour * 60 + firstMin;
+        const dayEndMinutes = lastHour * 60 + lastMin;
+        const totalDayMinutes = dayEndMinutes - dayStartMinutes;
+
+        // Calculate current time in minutes from start of day's sessions
+        const currentTotalMinutes = currentHour * 60 + currentMinutes;
+        const minutesFromDayStart = currentTotalMinutes - dayStartMinutes;
+
+        // Calculate percentage through the day's session time
+        const percentageThroughDay = (minutesFromDayStart / totalDayMinutes) * 100;
+
+        // Get the actual height of the session list
+        const headerHeight = dayHeader.offsetHeight;
+        const sessionListTop = sessionList.offsetTop;
+        const sessionListHeight = sessionList.offsetHeight;
 
         // Position the indicator
-        const headerHeight = todayColumn.querySelector('.day-header').offsetHeight;
-        const sessionListHeight = todayColumn.querySelector('.session-list').offsetHeight;
-        const topPosition = headerHeight + (sessionListHeight * percentage / 100);
+        const indicatorPosition = sessionListTop + (sessionListHeight * percentageThroughDay / 100);
 
-        indicator.style.top = `${topPosition}px`;
+        indicator.style.top = `${indicatorPosition}px`;
+
+        // Debug logging (remove in production)
+        console.log({
+          currentTime: `${currentHour}:${currentMinutes}`,
+          firstSession: firstSessionTime,
+          lastSession: lastSessionEndTime,
+          percentageThroughDay: percentageThroughDay.toFixed(2) + '%',
+          indicatorPosition
+        });
+      };
+
+      const highlightCurrentSession = () => {
+        const now = new Date();
+        const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        const todayStr = now.toISOString().split('T')[0];
+
+        // Remove any existing highlights
+        document.querySelectorAll('.session-card.current-session').forEach(card => {
+          card.classList.remove('current-session');
+        });
+
+        // Find current session from state
+        const currentSession = state.filteredSessions.find(session =>
+          session.date === todayStr &&
+          currentTime >= session.startTime &&
+          currentTime <= session.endTime
+        );
+
+        if (!currentSession) return;
+
+        // Only look for cards in today's column
+        const todayColumn = document.querySelector('.day-column.today');
+        if (!todayColumn) return;
+
+        // Find session cards only within today's column
+        const sessionCards = todayColumn.querySelectorAll('.session-card');
+
+        sessionCards.forEach(card => {
+          // Get the session time and title from this specific card
+          const timeElement = card.querySelector('.session-time');
+          const titleElement = card.querySelector('.session-title');
+
+          if (timeElement && titleElement) {
+            // Extract just the start time from the time range
+            const timeText = timeElement.textContent;
+            const startTime = timeText.split(' - ')[0].trim();
+
+            // Check if this card matches the current session
+            if (titleElement.textContent === currentSession.title &&
+              startTime === currentSession.startTime) {
+              card.classList.add('current-session');
+              return; // Found it, stop looking
+            }
+          }
+        });
       };
 
       const updateTimeContext = () => {
@@ -2211,6 +2344,9 @@
 
         // Update time indicator every minute
         setInterval(updateTimeIndicator, 60000);
+
+        // Initial highlight
+        highlightCurrentSession();
 
         // Initial time context update
         updateTimeContext();
