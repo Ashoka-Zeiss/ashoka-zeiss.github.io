@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Conference Schedule - March 2024</title>
+  <style>
+    /* CSS Reset and Custom Properties */
+    :root {
+      /* Color System - Psychology-based */
+      --color-bg: #1a1a1a;
+      --color-surface: #242424;
+      --color-surface-hover: #2a2a2a;
+      --color-text-primary: #ffffff;
+      --color-text-secondary: #a0a0a0;
+      --color-text-muted: #6b6b6b;
+
+      /* Category Colors */
+      --color-online: #00D9D9;
+      --color-campus: #FFB000;
+      --color-offcampus: #8B5CF6;
+
+      /* UI Colors */
+      --color-border: #333333;
+      --color-accent: #00D9D9;
+
+      /* Typography - Following Butterick's Principles */
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
+      --font-size-base: 16px;
+      --line-height-base: 1.5;
+      --line-height-heading: 1.3;
+
+      /* Spacing Scale */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+
+      /* Layout */
+      --container-max: 1200px;
+      --border-radius: 8px;
+      --transition-base: 150ms ease-in-out;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--font-size-base);
+      line-height: var(--line-height-base);
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Container and Layout */
+    .container {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: var(--space-md);
+    }
+
+    /* Header */
+    .header {
+      margin-bottom: var(--space-xl);
+    }
+
+    .header h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      line-height: var(--line-height-heading);
+      margin-bottom: var(--space-md);
+    }
+
+    /* Week Navigation */
+    .week-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-lg);
+      background-color: var(--color-surface);
+      padding: var(--space-md);
+      border-radius: var(--border-radius);
+    }
+
+    .week-nav__controls {
+      display: flex;
+      gap: var(--space-sm);
+    }
+
+    .week-nav__button {
+      background: none;
+      border: 1px solid var(--color-border);
+      color: var(--color-text-primary);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .week-nav__button:hover {
+      background-color: var(--color-surface-hover);
+      border-color: var(--color-accent);
+    }
+
+    .week-nav__button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .week-nav__current {
+      font-weight: 500;
+      color: var(--color-text-primary);
+    }
+
+    /* Filters */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    .filter-group {
+      display: flex;
+      gap: var(--space-sm);
+      flex-wrap: wrap;
+    }
+
+    .filter-button {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-secondary);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .filter-button::before {
+      content: '';
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: currentColor;
+      opacity: 0.3;
+    }
+
+    .filter-button.active {
+      background-color: var(--color-surface-hover);
+      border-color: currentColor;
+      color: var(--color-text-primary);
+    }
+
+    .filter-button.active::before {
+      opacity: 1;
+    }
+
+    .filter-button.online {
+      color: var(--color-online);
+    }
+
+    .filter-button.campus {
+      color: var(--color-campus);
+    }
+
+    .filter-button.offcampus {
+      color: var(--color-offcampus);
+    }
+
+    /* Search */
+    .search-container {
+      position: relative;
+      margin-bottom: var(--space-lg);
+    }
+
+    .search-input {
+      width: 100%;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      color: var(--color-text-primary);
+      padding: var(--space-sm) var(--space-md);
+      padding-left: 2.5rem;
+      border-radius: var(--border-radius);
+      font-size: 0.875rem;
+      transition: all var(--transition-base);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-accent);
+      background-color: var(--color-surface-hover);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: var(--space-md);
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-text-muted);
+      pointer-events: none;
+    }
+
+    /* Week Grid */
+    .week-grid {
+      display: grid;
+      gap: var(--space-md);
+      grid-template-columns: 1fr;
+      margin-bottom: var(--space-xl);
+    }
+
+    @media (min-width: 768px) {
+      .week-grid {
+        grid-template-columns: repeat(7, 1fr);
+        overflow-x: auto;
+        padding-bottom: var(--space-sm);
+      }
+    }
+
+    /* Day Column */
+    .day-column {
+      background-color: var(--color-surface);
+      border-radius: var(--border-radius);
+      padding: var(--space-md);
+      min-width: 200px;
+    }
+
+    .day-header {
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .day-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+    }
+
+    .day-date {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin-top: var(--space-xs);
+    }
+
+    .day-column.today .day-header {
+      border-bottom-color: var(--color-accent);
+    }
+
+    .day-column.today .day-date {
+      color: var(--color-accent);
+    }
+
+    /* Session Cards */
+    .session-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+    }
+
+    .session-card {
+      background-color: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      padding: var(--space-md);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .session-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background-color: var(--category-color);
+    }
+
+    .session-card.online {
+      --category-color: var(--color-online);
+    }
+
+    .session-card.campus {
+      --category-color: var(--color-campus);
+    }
+
+    .session-card.offcampus {
+      --category-color: var(--color-offcampus);
+    }
+
+    .session-card:hover {
+      background-color: var(--color-surface-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .session-card.expanded {
+      background-color: var(--color-surface-hover);
+    }
+
+    .session-time {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-xs);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .session-title {
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-xs);
+      line-height: 1.3;
+    }
+
+    .session-instructor {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+    }
+
+    .session-details {
+      margin-top: var(--space-md);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--color-border);
+      display: none;
+    }
+
+    .session-card.expanded .session-details {
+      display: block;
+      animation: fadeIn var(--transition-base);
+    }
+
+    .session-location {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .session-description {
+      font-size: 0.875rem;
+      line-height: 1.6;
+      color: var(--color-text-secondary);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Loading State */
+    .loading {
+      text-align: center;
+      padding: var(--space-2xl);
+      color: var(--color-text-secondary);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-2xl);
+      color: var(--color-text-secondary);
+    }
+
+    /* Mobile Optimizations */
+    @media (max-width: 767px) {
+      .container {
+        padding: var(--space-sm);
+      }
+
+      .week-nav {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .filters {
+        justify-content: center;
+      }
+
+      .day-column {
+        margin-bottom: var(--space-md);
+      }
+    }
+
+    /* Utility Classes */
+    .hidden {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Conference Schedule</h1>
+    </header>
+
+    <nav class="week-nav" role="navigation" aria-label="Week navigation">
+      <div class="week-nav__current" id="currentWeek">
+        Loading...
+      </div>
+      <div class="week-nav__controls">
+        <button class="week-nav__button" id="prevWeek" aria-label="Previous week">
+          ← Previous
+        </button>
+        <button class="week-nav__button" id="todayButton" aria-label="Go to today">
+          Today
+        </button>
+        <button class="week-nav__button" id="nextWeek" aria-label="Next week">
+          Next →
+        </button>
+      </div>
+    </nav>
+
+    <div class="filters" role="group" aria-label="Filter sessions by category">
+      <div class="filter-group">
+        <button class="filter-button online active" data-category="online" aria-pressed="true">
+          Online Live
+        </button>
+        <button class="filter-button campus active" data-category="campus" aria-pressed="true">
+          On Campus
+        </button>
+        <button class="filter-button offcampus active" data-category="offcampus" aria-pressed="true">
+          Off Campus
+        </button>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <path
+          d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+      </svg>
+      <input type="search" class="search-input" placeholder="Search sessions or instructors..." id="searchInput"
+        aria-label="Search sessions">
+    </div>
+
+    <main class="week-grid" id="weekGrid" role="main">
+      <div class="loading">Loading schedule...</div>
+    </main>
+  </div>
+
+  <script>
+    // Namespace for our application
+    const ConferenceSchedule = (() => {
+      'use strict';
+
+      // State management
+      const state = {
+        currentWeekStart: null,
+        sessions: [],
+        filteredSessions: [],
+        activeFilters: new Set(['online', 'campus', 'offcampus']),
+        searchQuery: '',
+        expandedSessions: new Set()
+      };
+
+      // Constants
+      const DAYS_IN_WEEK = 7;
+      const CONFERENCE_START = new Date('2024-03-01');
+      const CONFERENCE_END = new Date('2024-04-30');
+
+      // Sample data generator (replace with JSON fetch in production)
+      const generateSampleSessions = () => {
+        const sessions = [];
+        const sessionTemplates = [
+          {title: 'AI Ethics in Practice', instructor: 'Dr. Sarah Chen', category: 'online'},
+          {title: 'Machine Learning Fundamentals', instructor: 'Prof. James Wilson', category: 'campus'},
+          {title: 'Field Study: Urban Computing', instructor: 'Dr. Maria Garcia', category: 'offcampus'},
+          {title: 'Data Visualization Workshop', instructor: 'Alex Thompson', category: 'online'},
+          {title: 'Research Methods', instructor: 'Dr. David Kim', category: 'campus'},
+          {title: 'Industry Partnership Meeting', instructor: 'Various Speakers', category: 'offcampus'},
+          {title: 'Deep Learning Applications', instructor: 'Dr. Priya Patel', category: 'online'},
+          {title: 'Quantum Computing Intro', instructor: 'Prof. Robert Liu', category: 'campus'}
+        ];
+
+        const timeSlots = ['10:00', '11:30', '14:00', '15:30'];
+
+        // Generate sessions for 60 days
+        for (let day = 0; day < 60; day++) {
+          const date = new Date(CONFERENCE_START);
+          date.setDate(date.getDate() + day);
+
+          // 2-4 sessions per day
+          const sessionsPerDay = Math.floor(Math.random() * 3) + 2;
+
+          for (let i = 0; i < sessionsPerDay; i++) {
+            const template = sessionTemplates[Math.floor(Math.random() * sessionTemplates.length)];
+            const timeSlot = timeSlots[i] || timeSlots[0];
+
+            sessions.push({
+              id: `session-${day}-${i}`,
+              date: date.toISOString().split('T')[0],
+              startTime: timeSlot,
+              endTime: addHours(timeSlot, 1.5),
+              title: template.title,
+              instructor: template.instructor,
+              category: template.category,
+              description: `Join us for an engaging session on ${template.title}. This session will cover fundamental concepts and practical applications.`,
+              location: template.category === 'online' ? 'Zoom Room A' :
+                template.category === 'campus' ? 'Building 3, Room 401' :
+                  'Tech Park, Conference Center'
+            });
+          }
+        }
+
+        return sessions;
+      };
+
+      // Utility functions
+      const addHours = (time, hours) => {
+        const [h, m] = time.split(':').map(Number);
+        const totalMinutes = h * 60 + m + hours * 60;
+        const newHours = Math.floor(totalMinutes / 60);
+        const newMinutes = totalMinutes % 60;
+        return `${newHours.toString().padStart(2, '0')}:${newMinutes.toString().padStart(2, '0')}`;
+      };
+
+      const formatDate = (date) => {
+        const options = {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+        return date.toLocaleDateString('en-US', options);
+      };
+
+      const getWeekStart = (date) => {
+        const d = new Date(date);
+        const day = d.getDay();
+        const diff = d.getDate() - day;
+        return new Date(d.setDate(diff));
+      };
+
+      const getWeekDates = (weekStart) => {
+        const dates = [];
+        for (let i = 0; i < DAYS_IN_WEEK; i++) {
+          const date = new Date(weekStart);
+          date.setDate(weekStart.getDate() + i);
+          dates.push(date);
+        }
+        return dates;
+      };
+
+      const isToday = (date) => {
+        const today = new Date();
+        return date.toDateString() === today.toDateString();
+      };
+
+      // Filtering logic
+      const filterSessions = () => {
+        state.filteredSessions = state.sessions.filter(session => {
+          // Category filter
+          if (!state.activeFilters.has(session.category)) {
+            return false;
+          }
+
+          // Search filter
+          if (state.searchQuery) {
+            const query = state.searchQuery.toLowerCase();
+            const matchesTitle = session.title.toLowerCase().includes(query);
+            const matchesInstructor = session.instructor.toLowerCase().includes(query);
+            if (!matchesTitle && !matchesInstructor) {
+              return false;
+            }
+          }
+
+          return true;
+        });
+      };
+
+      // DOM manipulation
+      const renderWeek = () => {
+        const weekGrid = document.getElementById('weekGrid');
+        const weekDates = getWeekDates(state.currentWeekStart);
+
+        // Clear existing content
+        weekGrid.innerHTML = '';
+
+        // Render each day
+        weekDates.forEach(date => {
+          const dayColumn = createDayColumn(date);
+          weekGrid.appendChild(dayColumn);
+        });
+
+        // Update week navigation text
+        const currentWeekEl = document.getElementById('currentWeek');
+        const weekEndDate = new Date(state.currentWeekStart);
+        weekEndDate.setDate(weekEndDate.getDate() + 6);
+        currentWeekEl.textContent = `${formatDate(state.currentWeekStart).split(',')[1].trim()} - ${formatDate(weekEndDate).split(',')[1].trim()}`;
+
+        // Update navigation buttons
+        updateNavigationButtons();
+      };
+
+      const createDayColumn = (date) => {
+        const dayColumn = document.createElement('div');
+        dayColumn.className = `day-column ${isToday(date) ? 'today' : ''}`;
+
+        // Day header
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'day-header';
+
+        const dayName = document.createElement('div');
+        dayName.className = 'day-name';
+        dayName.textContent = date.toLocaleDateString('en-US', {weekday: 'short'});
+
+        const dayDate = document.createElement('div');
+        dayDate.className = 'day-date';
+        dayDate.textContent = date.getDate();
+
+        dayHeader.appendChild(dayName);
+        dayHeader.appendChild(dayDate);
+        dayColumn.appendChild(dayHeader);
+
+        // Session list
+        const sessionList = document.createElement('div');
+        sessionList.className = 'session-list';
+
+        // Get sessions for this day
+        const dateStr = date.toISOString().split('T')[0];
+        const daySessions = state.filteredSessions
+          .filter(session => session.date === dateStr)
+          .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+        if (daySessions.length === 0) {
+          const emptyState = document.createElement('div');
+          emptyState.className = 'empty-state';
+          emptyState.textContent = 'No sessions';
+          sessionList.appendChild(emptyState);
+        } else {
+          daySessions.forEach(session => {
+            const sessionCard = createSessionCard(session);
+            sessionList.appendChild(sessionCard);
+          });
+        }
+
+        dayColumn.appendChild(sessionList);
+        return dayColumn;
+      };
+
+      const createSessionCard = (session) => {
+        const card = document.createElement('article');
+        card.className = `session-card ${session.category} ${state.expandedSessions.has(session.id) ? 'expanded' : ''}`;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-expanded', state.expandedSessions.has(session.id));
+        card.setAttribute('tabindex', '0');
+
+        // Basic info
+        const time = document.createElement('div');
+        time.className = 'session-time';
+        time.textContent = `${session.startTime} - ${session.endTime}`;
+
+        const title = document.createElement('h3');
+        title.className = 'session-title';
+        title.textContent = session.title;
+
+        const instructor = document.createElement('div');
+        instructor.className = 'session-instructor';
+        instructor.textContent = session.instructor;
+
+        card.appendChild(time);
+        card.appendChild(title);
+        card.appendChild(instructor);
+
+        // Expanded details
+        const details = document.createElement('div');
+        details.className = 'session-details';
+
+        const location = document.createElement('div');
+        location.className = 'session-location';
+        location.textContent = `📍 ${session.location}`;
+
+        const description = document.createElement('p');
+        description.className = 'session-description';
+        description.textContent = session.description;
+
+        details.appendChild(location);
+        details.appendChild(description);
+        card.appendChild(details);
+
+        // Event listeners
+        card.addEventListener('click', () => toggleSessionExpansion(session.id));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleSessionExpansion(session.id);
+          }
+        });
+
+        return card;
+      };
+
+      const toggleSessionExpansion = (sessionId) => {
+        if (state.expandedSessions.has(sessionId)) {
+          state.expandedSessions.delete(sessionId);
+        } else {
+          state.expandedSessions.add(sessionId);
+        }
+        renderWeek();
+      };
+
+      const updateNavigationButtons = () => {
+        const prevButton = document.getElementById('prevWeek');
+        const nextButton = document.getElementById('nextWeek');
+
+        // Check if we can go back
+        const prevWeekStart = new Date(state.currentWeekStart);
+        prevWeekStart.setDate(prevWeekStart.getDate() - 7);
+        prevButton.disabled = prevWeekStart < CONFERENCE_START;
+
+        // Check if we can go forward
+        const nextWeekStart = new Date(state.currentWeekStart);
+        nextWeekStart.setDate(nextWeekStart.getDate() + 7);
+        nextButton.disabled = nextWeekStart > CONFERENCE_END;
+      };
+
+      // Event handlers
+      const handleWeekNavigation = (direction) => {
+        const newDate = new Date(state.currentWeekStart);
+        newDate.setDate(newDate.getDate() + (direction * 7));
+
+        if (newDate >= CONFERENCE_START && newDate <= CONFERENCE_END) {
+          state.currentWeekStart = newDate;
+          renderWeek();
+        }
+      };
+
+      const handleTodayButton = () => {
+        const today = new Date();
+        if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
+          state.currentWeekStart = getWeekStart(today);
+          renderWeek();
+        }
+      };
+
+      const handleFilterToggle = (category) => {
+        if (state.activeFilters.has(category)) {
+          state.activeFilters.delete(category);
+        } else {
+          state.activeFilters.add(category);
+        }
+        filterSessions();
+        renderWeek();
+      };
+
+      const handleSearch = (query) => {
+        state.searchQuery = query;
+        filterSessions();
+        renderWeek();
+      };
+
+      // Initialize
+      const init = () => {
+        // Load sessions (in production, fetch from JSON)
+        state.sessions = generateSampleSessions();
+
+        // Set initial week
+        const today = new Date();
+        if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
+          state.currentWeekStart = getWeekStart(today);
+        } else {
+          state.currentWeekStart = getWeekStart(CONFERENCE_START);
+        }
+
+        // Initial filter
+        filterSessions();
+
+        // Attach event listeners
+        document.getElementById('prevWeek').addEventListener('click', () => handleWeekNavigation(-1));
+        document.getElementById('nextWeek').addEventListener('click', () => handleWeekNavigation(1));
+        document.getElementById('todayButton').addEventListener('click', handleTodayButton);
+
+        // Filter buttons
+        document.querySelectorAll('.filter-button').forEach(button => {
+          button.addEventListener('click', () => {
+            const category = button.dataset.category;
+            button.classList.toggle('active');
+            button.setAttribute('aria-pressed', button.classList.contains('active'));
+            handleFilterToggle(category);
+          });
+        });
+
+        // Search input
+        const searchInput = document.getElementById('searchInput');
+        let searchTimeout;
+        searchInput.addEventListener('input', (e) => {
+          clearTimeout(searchTimeout);
+          searchTimeout = setTimeout(() => {
+            handleSearch(e.target.value);
+          }, 300); // Debounce search
+        });
+
+        // Render initial view
+        renderWeek();
+      };
+
+      // Public API
+      return {
+        init
+      };
+    })();
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', ConferenceSchedule.init);
+    } else {
+      ConferenceSchedule.init();
+    }
+  </script>
+</body>
+
+</html>
