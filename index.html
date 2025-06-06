@@ -301,6 +301,156 @@
       color: var(--color-offcampus);
     }
 
+    /* View Switcher */
+    .view-switcher {
+      display: flex;
+      gap: var(--space-xs);
+      background-color: var(--color-surface);
+      padding: 4px;
+      border-radius: var(--border-radius);
+      margin-bottom: var(--space-lg);
+    }
+
+    .view-button {
+      background: none;
+      border: none;
+      color: var(--color-text-secondary);
+      padding: var(--space-xs) var(--space-md);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all var(--transition-base);
+    }
+
+    .view-button:hover {
+      color: var(--color-text-primary);
+      background-color: var(--color-surface-hover);
+    }
+
+    .view-button.active {
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Month View Styles */
+    .month-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 2px;
+      background-color: var(--color-border);
+      padding: 2px;
+      border-radius: var(--border-radius);
+    }
+
+    .month-day {
+      background-color: var(--color-surface);
+      padding: var(--space-sm);
+      min-height: 100px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .month-day:hover {
+      background-color: var(--color-surface-hover);
+    }
+
+    .month-day.today {
+      border: 2px solid var(--color-accent);
+    }
+
+    .month-day.outside-conference {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+
+    .month-day-header {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: var(--space-xs);
+      color: var(--color-text-secondary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .month-day-sessions {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .month-day-count {
+      font-size: 0.625rem;
+      background-color: var(--color-bg);
+      padding: 2px 6px;
+      border-radius: 10px;
+      color: var(--color-text-secondary);
+    }
+
+    .month-session-item {
+      font-size: 0.625rem;
+      padding: 2px 4px;
+      margin-bottom: 2px;
+      border-radius: 3px;
+      background-color: var(--color-bg);
+      color: var(--color-text-primary);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .month-session-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: var(--category-color);
+      flex-shrink: 0;
+    }
+
+    .month-day-more {
+      font-size: 0.625rem;
+      color: var(--color-text-secondary);
+      text-align: center;
+      padding-top: 2px;
+    }
+
+    /* Responsive adjustments for month view */
+    @media (max-width: 767px) {
+      .month-grid {
+        grid-template-columns: repeat(7, 1fr);
+        font-size: 0.75rem;
+      }
+
+      .month-day {
+        min-height: 80px;
+        padding: 4px;
+      }
+
+      .month-session-item {
+        display: none;
+      }
+
+      .month-day-sessions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2px;
+      }
+
+      .month-session-dot {
+        width: 8px;
+        height: 8px;
+      }
+    }
+
     /* Search */
     .search-container {
       position: relative;
@@ -816,6 +966,12 @@
       </div>
     </div>
 
+    <div class="view-switcher" role="tablist" aria-label="View options">
+      <button class="view-button" role="tab" data-view="month" aria-selected="false">Month</button>
+      <button class="view-button active" role="tab" data-view="week" aria-selected="true">Week</button>
+      <button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>
+    </div>
+
     <div class="search-container">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
         <path
@@ -955,7 +1111,8 @@
         activeFilters: new Set(['online', 'campus', 'offcampus']),
         searchQuery: '',
         expandedSessions: new Set(),
-        conferenceData: null
+        conferenceData: null,
+        currentView: 'week'
       };
 
       // Constants
@@ -1097,52 +1254,289 @@
         updateNavigationButtons();
       };
 
-      const calculateWeekStats = (weekDates) => {
+      const renderView = () => {
+        let dates = [];
+
+        switch (state.currentView) {
+          case 'month':
+            // For month view, we'll calculate stats differently
+            renderMonth();
+            const monthStats = calculateWeekStats([]); // Pass empty array, function handles month logic
+            updateWeekNavigation(monthStats);
+            break;
+
+          case '3day':
+            render3Day();
+            // Calculate stats for 3 days
+            const today = new Date();
+            dates = [];
+            for (let i = 0; i < 3; i++) {
+              const date = new Date(today);
+              date.setDate(today.getDate() + i);
+              dates.push(date);
+            }
+            const threeDayStats = calculateWeekStats(dates);
+            updateWeekNavigation(threeDayStats);
+            break;
+
+          default:
+            renderWeek();
+          // Stats are calculated within renderWeek
+        }
+      };
+
+      const renderMonth = () => {
+        const weekGrid = document.getElementById('weekGrid');
+        weekGrid.innerHTML = '';
+        weekGrid.className = 'month-grid';
+
+        // Get first day of month
+        const monthStart = new Date(state.currentWeekStart);
+        monthStart.setDate(1);
+
+        // Get last day of month
+        const monthEnd = new Date(monthStart);
+        monthEnd.setMonth(monthEnd.getMonth() + 1);
+        monthEnd.setDate(0);
+
+        // Add day headers
+        const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        dayHeaders.forEach(day => {
+          const header = document.createElement('div');
+          header.className = 'month-day-header';
+          header.textContent = day;
+          header.style.textAlign = 'center';
+          weekGrid.appendChild(header);
+        });
+
+        // Add empty cells for start of month
+        const startDay = monthStart.getDay();
+        for (let i = 0; i < startDay; i++) {
+          const emptyDay = document.createElement('div');
+          emptyDay.className = 'month-day empty';
+          weekGrid.appendChild(emptyDay);
+        }
+
+        // Add days
+        for (let d = new Date(monthStart); d <= monthEnd; d.setDate(d.getDate() + 1)) {
+          const dayCell = createMonthDay(new Date(d));
+          weekGrid.appendChild(dayCell);
+        }
+      };
+
+      const createMonthDay = (date) => {
+        const dayCell = document.createElement('div');
+        const dateStr = date.toISOString().split('T')[0];
+        const isOutside = date < CONFERENCE_START || date > CONFERENCE_END;
+
+        dayCell.className = `month-day ${isToday(date) ? 'today' : ''} ${isOutside ? 'outside-conference' : ''}`;
+
+        // Header with date and count
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'month-day-header';
+
+        const dayNumber = document.createElement('span');
+        dayNumber.textContent = date.getDate();
+
+        // Get sessions for this day
+        const daySessions = state.filteredSessions.filter(s => s.date === dateStr);
+
+        dayHeader.appendChild(dayNumber);
+
+        if (daySessions.length > 0) {
+          const count = document.createElement('span');
+          count.className = 'month-day-count';
+          count.textContent = daySessions.length;
+          dayHeader.appendChild(count);
+        }
+
+        dayCell.appendChild(dayHeader);
+
+        // Sessions container
+        const sessionsContainer = document.createElement('div');
+        sessionsContainer.className = 'month-day-sessions';
+
+        // On desktop, show session titles; on mobile, show dots
+        const isMobile = window.innerWidth <= 767;
+
+        if (!isMobile && daySessions.length > 0) {
+          // Show first 2 sessions with titles
+          daySessions.slice(0, 2).forEach(session => {
+            const sessionItem = document.createElement('div');
+            sessionItem.className = 'month-session-item';
+
+            const dot = document.createElement('div');
+            dot.className = `month-session-dot ${session.category}`;
+            dot.style.setProperty('--category-color', `var(--color-${session.category})`);
+
+            const time = document.createElement('span');
+            time.textContent = session.startTime;
+            time.style.marginRight = '4px';
+            time.style.opacity = '0.7';
+
+            const title = document.createElement('span');
+            title.textContent = session.title.length > 20 ?
+              session.title.substring(0, 20) + '...' : session.title;
+
+            sessionItem.appendChild(dot);
+            sessionItem.appendChild(time);
+            sessionItem.appendChild(title);
+            sessionsContainer.appendChild(sessionItem);
+          });
+
+          if (daySessions.length > 2) {
+            const more = document.createElement('div');
+            more.className = 'month-day-more';
+            more.textContent = `+${daySessions.length - 2} more`;
+            sessionsContainer.appendChild(more);
+          }
+        } else if (daySessions.length > 0) {
+          // Mobile view - show dots
+          daySessions.slice(0, 6).forEach(session => {
+            const dot = document.createElement('div');
+            dot.className = `month-session-dot ${session.category}`;
+            dot.style.setProperty('--category-color', `var(--color-${session.category})`);
+            sessionsContainer.appendChild(dot);
+          });
+
+          if (daySessions.length > 6) {
+            const more = document.createElement('div');
+            more.className = 'month-day-more';
+            more.textContent = `+${daySessions.length - 6}`;
+            more.style.width = '100%';
+            sessionsContainer.appendChild(more);
+          }
+        }
+
+        dayCell.appendChild(sessionsContainer);
+
+        // Click to go to week view (unless outside conference dates)
+        if (!isOutside) {
+          dayCell.addEventListener('click', () => {
+            state.currentWeekStart = getWeekStart(date);
+            state.currentView = 'week';
+            updateViewButtons();
+            renderView();
+          });
+        }
+
+        return dayCell;
+      };
+
+      const render3Day = () => {
+        const weekGrid = document.getElementById('weekGrid');
+        weekGrid.className = 'week-grid';
+        weekGrid.innerHTML = '';
+
+        const today = new Date();
+        const dates = [];
+
+        // Show today and next 2 days
+        for (let i = 0; i < 3; i++) {
+          const date = new Date(today);
+          date.setDate(today.getDate() + i);
+          dates.push(date);
+        }
+
+        dates.forEach(date => {
+          const dayColumn = createDayColumn(date);
+          weekGrid.appendChild(dayColumn);
+        });
+
+        updateTimeIndicator();
+      };
+
+      const updateViewButtons = () => {
+        document.querySelectorAll('.view-button').forEach(btn => {
+          const isActive = btn.dataset.view === state.currentView;
+          btn.classList.toggle('active', isActive);
+          btn.setAttribute('aria-selected', isActive);
+        });
+      };
+
+      const calculateWeekStats = (dates) => {
         const stats = {
           total: 0,
           byCategory: {online: 0, campus: 0, offcampus: 0}
         };
 
-        weekDates.forEach(date => {
-          const dateStr = date.toISOString().split('T')[0];
-          const daySessions = state.filteredSessions.filter(s => s.date === dateStr);
+        // For month view, calculate for entire month
+        if (state.currentView === 'month') {
+          const monthStart = new Date(state.currentWeekStart);
+          monthStart.setDate(1);
+          const monthEnd = new Date(monthStart);
+          monthEnd.setMonth(monthEnd.getMonth() + 1);
+          monthEnd.setDate(0);
 
-          stats.total += daySessions.length;
-          daySessions.forEach(session => {
-            stats.byCategory[session.category]++;
+          for (let d = new Date(monthStart); d <= monthEnd; d.setDate(d.getDate() + 1)) {
+            const dateStr = d.toISOString().split('T')[0];
+            const daySessions = state.filteredSessions.filter(s => s.date === dateStr);
+            stats.total += daySessions.length;
+            daySessions.forEach(session => {
+              stats.byCategory[session.category]++;
+            });
+          }
+        } else {
+          // Original logic for week and 3-day views
+          dates.forEach(date => {
+            const dateStr = date.toISOString().split('T')[0];
+            const daySessions = state.filteredSessions.filter(s => s.date === dateStr);
+
+            stats.total += daySessions.length;
+            daySessions.forEach(session => {
+              stats.byCategory[session.category]++;
+            });
           });
-        });
+        }
 
         return stats;
       };
 
       const updateWeekNavigation = (stats) => {
         const currentWeekEl = document.getElementById('currentWeek');
-        const weekEndDate = new Date(state.currentWeekStart);
-        weekEndDate.setDate(weekEndDate.getDate() + 6);
+        let dateRangeText = '';
+
+        switch (state.currentView) {
+          case 'month':
+            const monthDate = new Date(state.currentWeekStart);
+            dateRangeText = monthDate.toLocaleDateString('en-US', {month: 'long', year: 'numeric'});
+            break;
+
+          case '3day':
+            const today = new Date();
+            const endDate = new Date(today);
+            endDate.setDate(today.getDate() + 2);
+            dateRangeText = `${formatDate(today).split(',')[1].trim()} - ${formatDate(endDate).split(',')[1].trim()}`;
+            break;
+
+          default: // week view
+            const weekEndDate = new Date(state.currentWeekStart);
+            weekEndDate.setDate(weekEndDate.getDate() + 6);
+            dateRangeText = `${formatDate(state.currentWeekStart).split(',')[1].trim()} - ${formatDate(weekEndDate).split(',')[1].trim()}`;
+        }
 
         currentWeekEl.innerHTML = `
-                    <div class="week-nav__current">
-                        ${formatDate(state.currentWeekStart).split(',')[1].trim()} - ${formatDate(weekEndDate).split(',')[1].trim()}
-                    </div>
-                    <div class="week-nav__stats">
-                        <div class="stat-item">
-                            <span>${stats.total} sessions</span>
-                        </div>
-                        <div class="stat-item" style="color: var(--color-online)">
-                            <span class="stat-dot"></span>
-                            <span>${stats.byCategory.online}</span>
-                        </div>
-                        <div class="stat-item" style="color: var(--color-campus)">
-                            <span class="stat-dot"></span>
-                            <span>${stats.byCategory.campus}</span>
-                        </div>
-                        <div class="stat-item" style="color: var(--color-offcampus)">
-                            <span class="stat-dot"></span>
-                            <span>${stats.byCategory.offcampus}</span>
-                        </div>
-                    </div>
-                `;
+        <div class="week-nav__current">
+            ${dateRangeText}
+        </div>
+        <div class="week-nav__stats">
+            <div class="stat-item">
+                <span>${stats.total} sessions</span>
+            </div>
+            <div class="stat-item" style="color: var(--color-online)">
+                <span class="stat-dot"></span>
+                <span>${stats.byCategory.online}</span>
+            </div>
+            <div class="stat-item" style="color: var(--color-campus)">
+                <span class="stat-dot"></span>
+                <span>${stats.byCategory.campus}</span>
+            </div>
+            <div class="stat-item" style="color: var(--color-offcampus)">
+                <span class="stat-dot"></span>
+                <span>${stats.byCategory.offcampus}</span>
+            </div>
+        </div>
+    `;
       };
 
       const createDayColumn = (date) => {
@@ -1347,10 +1741,15 @@
         card.appendChild(details);
 
         // Event listeners
-        card.addEventListener('click', () => toggleSessionExpansion(session.id));
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleSessionExpansion(session.id)
+        });
         card.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
+            e.stopPropagation();
             toggleSessionExpansion(session.id);
           }
         });
@@ -1364,7 +1763,7 @@
         } else {
           state.expandedSessions.add(sessionId);
         }
-        renderWeek();
+        renderView();
       };
 
       const updateNavigationButtons = () => {
@@ -1389,7 +1788,7 @@
 
         if (newDate >= CONFERENCE_START && newDate <= CONFERENCE_END) {
           state.currentWeekStart = newDate;
-          renderWeek();
+          renderView();
         }
       };
 
@@ -1397,7 +1796,7 @@
         const today = new Date();
         if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
           state.currentWeekStart = getWeekStart(today);
-          renderWeek();
+          renderView();
         }
       };
 
@@ -1408,13 +1807,13 @@
           state.activeFilters.add(category);
         }
         filterSessions();
-        renderWeek();
+        renderView();
       };
 
       const handleSearch = (query) => {
         state.searchQuery = query;
         filterSessions();
-        renderWeek();
+        renderView();
       };
 
       // Initialize
@@ -1458,6 +1857,15 @@
           localStorage.setItem('theme', newTheme);
         });
 
+        // View switcher
+        document.querySelectorAll('.view-button').forEach(button => {
+          button.addEventListener('click', () => {
+            state.currentView = button.dataset.view;
+            updateViewButtons();
+            renderView();
+          });
+        });
+
         // Filter buttons
         document.querySelectorAll('.filter-button').forEach(button => {
           button.addEventListener('click', () => {
@@ -1479,7 +1887,7 @@
         });
 
         // Render initial view
-        renderWeek();
+        renderView();
 
         // Update time indicator every minute
         setInterval(updateTimeIndicator, 60000);
