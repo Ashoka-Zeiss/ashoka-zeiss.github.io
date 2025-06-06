@@ -196,6 +196,85 @@
       gap: var(--space-md);
     }
 
+    /* Time Context Section */
+    .time-context {
+      background-color: var(--color-surface);
+      border-radius: var(--border-radius);
+      padding: var(--space-md);
+      margin-bottom: var(--space-lg);
+      display: none;
+    }
+
+    .time-context.active {
+      display: block;
+    }
+
+    .time-context__header {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-sm);
+    }
+
+    .happening-now {
+      background-color: var(--color-bg);
+      border-left: 3px solid var(--color-accent);
+      padding: var(--space-sm);
+      border-radius: var(--border-radius);
+      margin-bottom: var(--space-md);
+    }
+
+    .happening-now__title {
+      font-weight: 600;
+      color: var(--color-accent);
+      margin-bottom: var(--space-xs);
+    }
+
+    .happening-now__session {
+      font-size: 0.875rem;
+      color: var(--color-text-primary);
+    }
+
+    .up-next {
+      display: flex;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+    }
+
+    .up-next__item {
+      background-color: var(--color-bg);
+      padding: var(--space-sm);
+      border-radius: var(--border-radius);
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .up-next__time {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-xs);
+    }
+
+    .up-next__countdown {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--color-campus);
+      margin-bottom: var(--space-xs);
+    }
+
+    .up-next__title {
+      font-size: 0.875rem;
+      color: var(--color-text-primary);
+    }
+
+    @media (max-width: 767px) {
+      .up-next {
+        flex-direction: column;
+      }
+    }
+
     .stat-item {
       display: flex;
       align-items: center;
@@ -966,12 +1045,6 @@
       </div>
     </div>
 
-    <div class="view-switcher" role="tablist" aria-label="View options">
-      <button class="view-button" role="tab" data-view="month" aria-selected="false">Month</button>
-      <button class="view-button active" role="tab" data-view="week" aria-selected="true">Week</button>
-      <button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>
-    </div>
-
     <div class="search-container">
       <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
         <path
@@ -979,6 +1052,24 @@
       </svg>
       <input type="search" class="search-input" placeholder="Search sessions or instructors..." id="searchInput"
         aria-label="Search sessions">
+    </div>
+
+    <div class="time-context" id="timeContext">
+      <div class="happening-now" id="happeningNow" style="display: none;">
+        <div class="happening-now__title">Happening Now</div>
+        <div class="happening-now__session" id="currentSession"></div>
+      </div>
+
+      <div class="up-next-section">
+        <div class="time-context__header">Up Next</div>
+        <div class="up-next" id="upNext"></div>
+      </div>
+    </div>
+
+    <div class="view-switcher" role="tablist" aria-label="View options">
+      <button class="view-button" role="tab" data-view="month" aria-selected="false">Month</button>
+      <button class="view-button active" role="tab" data-view="week" aria-selected="true">Week</button>
+      <button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>
     </div>
 
     <main class="week-grid" id="weekGrid" role="main">
@@ -1283,6 +1374,7 @@
             renderWeek();
           // Stats are calculated within renderWeek
         }
+        updateTimeContext();
       };
 
       const renderMonth = () => {
@@ -1431,11 +1523,25 @@
         const today = new Date();
         const dates = [];
 
-        // Show today and next 2 days
+        // For 3-day view, check if we're within conference dates
+        let startDate;
+        if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
+          startDate = today;
+        } else if (today < CONFERENCE_START) {
+          startDate = CONFERENCE_START;
+        } else {
+          // If after conference, show last 3 days
+          startDate = new Date(CONFERENCE_END);
+          startDate.setDate(startDate.getDate() - 2);
+        }
+
+        // Show 3 consecutive days
         for (let i = 0; i < 3; i++) {
-          const date = new Date(today);
-          date.setDate(today.getDate() + i);
-          dates.push(date);
+          const date = new Date(startDate);
+          date.setDate(startDate.getDate() + i);
+          if (date <= CONFERENCE_END) {
+            dates.push(date);
+          }
         }
 
         dates.forEach(date => {
@@ -1670,6 +1776,95 @@
         indicator.style.top = `${topPosition}px`;
       };
 
+      const updateTimeContext = () => {
+        const now = new Date();
+        const timeContext = document.getElementById('timeContext');
+
+        // Only show during conference dates
+        if (now < CONFERENCE_START || now > CONFERENCE_END) {
+          timeContext.classList.remove('active');
+          return;
+        }
+
+        const todayStr = now.toISOString().split('T')[0];
+        const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+        // Get today's sessions
+        const todaySessions = state.filteredSessions
+          .filter(s => s.date === todayStr)
+          .sort((a, b) => a.startTime.localeCompare(b.startTime));
+
+        if (todaySessions.length === 0) {
+          timeContext.classList.remove('active');
+          return;
+        }
+
+        timeContext.classList.add('active');
+
+        // Find current session
+        const currentSession = todaySessions.find(session =>
+          currentTime >= session.startTime && currentTime <= session.endTime
+        );
+
+        // Update happening now
+        const happeningNowEl = document.getElementById('happeningNow');
+        const currentSessionEl = document.getElementById('currentSession');
+
+        if (currentSession) {
+          happeningNowEl.style.display = 'block';
+          currentSessionEl.innerHTML = `
+            <div><strong>${currentSession.title}</strong></div>
+            <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 4px;">
+                ${currentSession.instructor} • ${currentSession.startTime} - ${currentSession.endTime}
+            </div>
+        `;
+        } else {
+          happeningNowEl.style.display = 'none';
+        }
+
+        // Find upcoming sessions
+        const upcomingSessions = todaySessions.filter(session =>
+          session.startTime > currentTime
+        ).slice(0, 3); // Show next 3 sessions
+
+        // Update up next
+        const upNextEl = document.getElementById('upNext');
+
+        if (upcomingSessions.length > 0) {
+          upNextEl.innerHTML = upcomingSessions.map(session => {
+            const countdown = getCountdown(now, session.startTime);
+            return `
+                <div class="up-next__item">
+                    <div class="up-next__time">${session.startTime}</div>
+                    <div class="up-next__countdown">${countdown}</div>
+                    <div class="up-next__title">${session.title}</div>
+                </div>
+            `;
+          }).join('');
+        } else {
+          upNextEl.innerHTML = '<div class="empty-state">No more sessions today</div>';
+        }
+      };
+
+      const getCountdown = (now, startTime) => {
+        const [hours, minutes] = startTime.split(':').map(Number);
+        const sessionStart = new Date(now);
+        sessionStart.setHours(hours, minutes, 0, 0);
+
+        const diffMs = sessionStart - now;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMins / 60);
+        const remainingMins = diffMins % 60;
+
+        if (diffHours > 0) {
+          return `in ${diffHours}h ${remainingMins}m`;
+        } else if (diffMins > 0) {
+          return `in ${diffMins} minutes`;
+        } else {
+          return 'Starting soon';
+        }
+      };
+
       const createSessionCard = (session) => {
         const card = document.createElement('article');
         card.className = `session-card ${session.category} ${state.expandedSessions.has(session.id) ? 'expanded' : ''}`;
@@ -1891,6 +2086,9 @@
 
         // Update time indicator every minute
         setInterval(updateTimeIndicator, 60000);
+
+        // Initial time context update
+        updateTimeContext();
       };
 
       // Public API
