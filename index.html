@@ -1153,8 +1153,8 @@
     // Sample JSON data structure (in production, this would be in a separate file)
     const CONFERENCE_DATA = {
       "metadata": {
-        "conferenceStart": "2025-05-15",
-        "conferenceEnd": "2025-06-30",
+        "conferenceStart": "2025-06-16",
+        "conferenceEnd": "2025-08-30",
         "timezone": "America/New_York",
         "defaultSessionDuration": 90,
         "timeSlots": ["00:00", "01:30", "03:00", "04:30"]
@@ -1819,9 +1819,10 @@
         const now = new Date();
         const currentHour = now.getHours();
         const currentMinutes = now.getMinutes();
+        const currentTimeStr = `${currentHour.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`;
 
-        // Only show during conference hours (10am - 5pm)
-        if (currentHour < 10 || currentHour >= 17) return;
+        // DEBUG: Remove the hour restriction for testing
+        // if (currentHour < 10 || currentHour >= 17) return;
 
         const todayColumn = document.querySelector('.day-column.today');
         if (!todayColumn) return;
@@ -1829,17 +1830,16 @@
         const indicator = todayColumn.querySelector('.time-indicator');
         if (!indicator) return;
 
+        // Get the header height
+        const dayHeader = todayColumn.querySelector('.day-header');
+        if (!dayHeader) return;
+        const headerHeight = dayHeader.offsetHeight;
+
         // Get all session cards in today's column
         const sessionCards = todayColumn.querySelectorAll('.session-card');
         if (sessionCards.length === 0) return;
 
-        // Find the header and session list elements
-        const dayHeader = todayColumn.querySelector('.day-header');
-        const sessionList = todayColumn.querySelector('.session-list');
-
-        if (!dayHeader || !sessionList) return;
-
-        // Get today's sessions to find the time range
+        // Get today's sessions
         const todayStr = now.toISOString().split('T')[0];
         const todaySessions = state.filteredSessions
           .filter(s => s.date === todayStr)
@@ -1847,45 +1847,66 @@
 
         if (todaySessions.length === 0) return;
 
-        // Find the earliest and latest times from actual sessions
-        const firstSessionTime = todaySessions[0].startTime;
-        const lastSession = todaySessions[todaySessions.length - 1];
-        const lastSessionEndTime = lastSession.endTime;
+        // Find which session period we're in
+        let positionFound = false;
+        let accumulatedHeight = headerHeight;
 
-        // Parse times
-        const [firstHour, firstMin] = firstSessionTime.split(':').map(Number);
-        const [lastHour, lastMin] = lastSessionEndTime.split(':').map(Number);
+        sessionCards.forEach((card, index) => {
+          if (positionFound) return;
 
-        // Calculate total minutes span of the day's sessions
-        const dayStartMinutes = firstHour * 60 + firstMin;
-        const dayEndMinutes = lastHour * 60 + lastMin;
-        const totalDayMinutes = dayEndMinutes - dayStartMinutes;
+          const session = todaySessions[index];
+          if (!session) return;
 
-        // Calculate current time in minutes from start of day's sessions
-        const currentTotalMinutes = currentHour * 60 + currentMinutes;
-        const minutesFromDayStart = currentTotalMinutes - dayStartMinutes;
+          const cardHeight = card.offsetHeight;
+          const cardTop = card.offsetTop;
 
-        // Calculate percentage through the day's session time
-        const percentageThroughDay = (minutesFromDayStart / totalDayMinutes) * 100;
+          // Check if current time is within this session
+          if (currentTimeStr >= session.startTime && currentTimeStr <= session.endTime) {
+            // Calculate position within this session
+            const [startHour, startMin] = session.startTime.split(':').map(Number);
+            const [endHour, endMin] = session.endTime.split(':').map(Number);
 
-        // Get the actual height of the session list
-        const headerHeight = dayHeader.offsetHeight;
-        const sessionListTop = sessionList.offsetTop;
-        const sessionListHeight = sessionList.offsetHeight;
+            const sessionStartMinutes = startHour * 60 + startMin;
+            const sessionEndMinutes = endHour * 60 + endMin;
+            const currentMinutesTotal = currentHour * 60 + currentMinutes;
 
-        // Position the indicator
-        const indicatorPosition = sessionListTop + (sessionListHeight * percentageThroughDay / 100);
+            const sessionDuration = sessionEndMinutes - sessionStartMinutes;
+            const minutesIntoSession = currentMinutesTotal - sessionStartMinutes;
+            const percentageIntoSession = (minutesIntoSession / sessionDuration) * 100;
 
-        indicator.style.top = `${indicatorPosition}px`;
+            // Position within the current card
+            const positionInCard = (cardHeight * percentageIntoSession) / 100;
+            const totalPosition = cardTop + positionInCard;
 
-        // Debug logging (remove in production)
-        console.log({
-          currentTime: `${currentHour}:${currentMinutes}`,
-          firstSession: firstSessionTime,
-          lastSession: lastSessionEndTime,
-          percentageThroughDay: percentageThroughDay.toFixed(2) + '%',
-          indicatorPosition
+            indicator.style.top = `${totalPosition}px`;
+            positionFound = true;
+          }
+          // Check if we're between sessions
+          else if (index < todaySessions.length - 1) {
+            const nextSession = todaySessions[index + 1];
+            if (currentTimeStr > session.endTime && currentTimeStr < nextSession.startTime) {
+              // Position between cards
+              const totalPosition = cardTop + cardHeight;
+              indicator.style.top = `${totalPosition}px`;
+              positionFound = true;
+            }
+          }
+
+          accumulatedHeight += cardHeight;
         });
+
+        // If time is before first session
+        if (!positionFound && todaySessions.length > 0) {
+          if (currentTimeStr < todaySessions[0].startTime) {
+            indicator.style.top = `${headerHeight}px`;
+          }
+          // If time is after last session
+          else if (currentTimeStr > todaySessions[todaySessions.length - 1].endTime) {
+            const lastCard = sessionCards[sessionCards.length - 1];
+            const totalPosition = lastCard.offsetTop + lastCard.offsetHeight;
+            indicator.style.top = `${totalPosition}px`;
+          }
+        }
       };
 
       const highlightCurrentSession = () => {
