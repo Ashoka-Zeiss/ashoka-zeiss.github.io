@@ -1544,22 +1544,12 @@
         weekGrid.className = 'week-grid three-day-view';
         weekGrid.innerHTML = '';
 
-        const today = new Date();
         const dates = [];
 
-        // For 3-day view, check if we're within conference dates
-        let startDate;
-        if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
-          startDate = today;
-        } else if (today < CONFERENCE_START) {
-          startDate = CONFERENCE_START;
-        } else {
-          // If after conference, show last 3 days
-          startDate = new Date(CONFERENCE_END);
-          startDate.setDate(startDate.getDate() - 2);
-        }
+        // Use the current start date from state
+        const startDate = new Date(state.currentWeekStart);
 
-        // Show 3 consecutive days
+        // Show 3 consecutive days starting from startDate
         for (let i = 0; i < 3; i++) {
           const date = new Date(startDate);
           date.setDate(startDate.getDate() + i);
@@ -1989,34 +1979,133 @@
         const prevButton = document.getElementById('prevWeek');
         const nextButton = document.getElementById('nextWeek');
 
-        // Check if we can go back
-        const prevWeekStart = new Date(state.currentWeekStart);
-        prevWeekStart.setDate(prevWeekStart.getDate() - 7);
-        prevButton.disabled = prevWeekStart < CONFERENCE_START;
+        switch (state.currentView) {
+          case 'month':
+            // Check month boundaries
+            const currentMonth = new Date(state.currentWeekStart);
+            currentMonth.setDate(1);
 
-        // Check if we can go forward
-        const nextWeekStart = new Date(state.currentWeekStart);
-        nextWeekStart.setDate(nextWeekStart.getDate() + 7);
-        nextButton.disabled = nextWeekStart > CONFERENCE_END;
+            // Previous month check
+            const prevMonth = new Date(currentMonth);
+            prevMonth.setMonth(prevMonth.getMonth() - 1);
+            const prevMonthEnd = new Date(prevMonth);
+            prevMonthEnd.setMonth(prevMonthEnd.getMonth() + 1);
+            prevMonthEnd.setDate(0);
+            prevButton.disabled = prevMonthEnd < CONFERENCE_START;
+
+            // Next month check
+            const nextMonth = new Date(currentMonth);
+            nextMonth.setMonth(nextMonth.getMonth() + 1);
+            nextButton.disabled = nextMonth > CONFERENCE_END;
+            break;
+
+          case '3day':
+            // Check 3-day boundaries
+            const prev3Day = new Date(state.currentWeekStart);
+            prev3Day.setDate(prev3Day.getDate() - 3);
+            prevButton.disabled = prev3Day < CONFERENCE_START;
+
+            const next3Day = new Date(state.currentWeekStart);
+            next3Day.setDate(next3Day.getDate() + 3);
+            nextButton.disabled = next3Day > CONFERENCE_END;
+            break;
+
+          default: // week view
+            // Original week logic
+            const prevWeekStart = new Date(state.currentWeekStart);
+            prevWeekStart.setDate(prevWeekStart.getDate() - 7);
+            prevButton.disabled = prevWeekStart < CONFERENCE_START;
+
+            const nextWeekStart = new Date(state.currentWeekStart);
+            nextWeekStart.setDate(nextWeekStart.getDate() + 7);
+            nextButton.disabled = nextWeekStart > CONFERENCE_END;
+            break;
+        }
       };
 
       // Event handlers
       const handleWeekNavigation = (direction) => {
         const newDate = new Date(state.currentWeekStart);
-        newDate.setDate(newDate.getDate() + (direction * 7));
 
-        if (newDate >= CONFERENCE_START && newDate <= CONFERENCE_END) {
-          state.currentWeekStart = newDate;
-          renderView();
+        switch (state.currentView) {
+          case 'month':
+            // Navigate by month
+            newDate.setMonth(newDate.getMonth() + direction);
+            newDate.setDate(1); // Ensure we're on the first of the month
+            break;
+
+          case '3day':
+            // Navigate by 3 days
+            newDate.setDate(newDate.getDate() + (direction * 3));
+            break;
+
+          default: // week view
+            // Navigate by week
+            newDate.setDate(newDate.getDate() + (direction * 7));
+            break;
         }
+
+        // Check bounds based on view
+        if (state.currentView === 'month') {
+          // For month view, check if any part of the month is within conference dates
+          const monthStart = new Date(newDate);
+          const monthEnd = new Date(newDate);
+          monthEnd.setMonth(monthEnd.getMonth() + 1);
+          monthEnd.setDate(0);
+
+          if (monthEnd < CONFERENCE_START || monthStart > CONFERENCE_END) {
+            return; // Don't navigate outside conference months
+          }
+        } else {
+          // For week and 3-day views
+          if (newDate < CONFERENCE_START || newDate > CONFERENCE_END) {
+            return;
+          }
+        }
+
+        state.currentWeekStart = newDate;
+        renderView();
       };
 
       const handleTodayButton = () => {
         const today = new Date();
+
+        // For testing purposes, use a date within the conference range
+        const testDate = new Date('2024-03-15'); // Middle of conference
+
+        let targetDate;
         if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
-          state.currentWeekStart = getWeekStart(today);
-          renderView();
+          targetDate = today;
+        } else {
+          targetDate = testDate;
         }
+
+        switch (state.currentView) {
+          case 'month':
+            // For month view, just ensure we're in the right month
+            state.currentWeekStart = new Date(targetDate);
+            state.currentWeekStart.setDate(1);
+            break;
+
+          case '3day':
+            // For 3-day view, start from today/target date
+            state.currentWeekStart = new Date(targetDate);
+            break;
+
+          default: // week view
+            state.currentWeekStart = getWeekStart(targetDate);
+            break;
+        }
+
+        renderView();
+
+        // Scroll to today's column if in view
+        setTimeout(() => {
+          const todayColumn = document.querySelector('.day-column.today');
+          if (todayColumn) {
+            todayColumn.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'center'});
+          }
+        }, 350);
       };
 
       const handleFilterToggle = (category) => {
