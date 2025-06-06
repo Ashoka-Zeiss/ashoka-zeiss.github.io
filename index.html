@@ -311,8 +311,16 @@
     }
 
     .week-nav__button:disabled {
-      opacity: 0.5;
+      opacity: 0.3;
       cursor: not-allowed;
+      background-color: transparent;
+      border-color: var(--color-border);
+    }
+
+    .week-nav__button:disabled:hover {
+      background-color: transparent;
+      border-color: var(--color-border);
+      transform: none;
     }
 
     .week-nav__current {
@@ -1399,6 +1407,9 @@
           // Stats are calculated within renderWeek
         }
         updateTimeContext();
+
+        // Ensure navigation buttons are updated
+        updateNavigationButtons();
       };
 
       const renderMonth = () => {
@@ -2171,6 +2182,7 @@
             state.currentView = button.dataset.view;
             updateViewButtons();
             renderView();
+            updateNavigationButtons();
           });
         });
 
