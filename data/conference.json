@@ -84,6 +84,16 @@
       "zoomLink": null
     },
     {
+      "id": "break-1",
+      "date": "2025-06-10",
+      "startTime": "13:00",
+      "endTime": "13:15",
+      "title": "Coffee Break",
+      "type": "break",
+      "category": "campus",
+      "description": "Networking and refreshments in the main lobby"
+    },
+    {
       "id": "session-3",
       "date": "2025-06-11",
       "startTime": "14:00",

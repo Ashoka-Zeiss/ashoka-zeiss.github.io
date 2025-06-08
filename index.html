@@ -1026,6 +1026,88 @@
       animation-delay: 200ms;
     }
 
+    /* Break Cards */
+    .break-card {
+      background-color: var(--color-surface);
+      border: 1px solid rgba(156, 163, 175, 0.4);
+      border-radius: var(--border-radius);
+      padding: var(--space-sm) var(--space-md);
+      margin: var(--space-xs) 0;
+      position: relative;
+      transition: all var(--transition-base);
+      cursor: pointer;
+    }
+
+    /* Remove the left accent bar completely */
+    .break-card::before,
+    .break-card::after {
+      display: none;
+    }
+
+    /* Hover effect for feedback only */
+    .break-card:hover {
+      background-color: var(--color-surface-hover);
+      border-color: rgba(156, 163, 175, 0.6);
+    }
+
+    .break-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--space-xs);
+    }
+
+    .break-time {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      opacity: 0.8;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .break-icon {
+      font-size: 1rem;
+      opacity: 0.7;
+      color: var(--color-text-secondary);
+    }
+
+    .break-title {
+      font-weight: 500;
+      color: var(--color-text-primary);
+      opacity: 0.85;
+      font-size: 0.875rem;
+      margin-bottom: 0;
+    }
+
+    /* Hide description initially, show when expanded */
+    .break-description {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      font-style: italic;
+      margin-top: var(--space-xs);
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 300ms ease-out;
+    }
+
+    .break-description-inner {
+      overflow: hidden;
+    }
+
+    /* Show description when break card is expanded */
+    .break-card.expanded .break-description {
+      grid-template-rows: 1fr;
+    }
+
+    /* Dark mode improvements */
+    [data-theme="dark"] .break-card {
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    [data-theme="dark"] .break-card:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
     /* Day column stagger */
     .day-column {
       animation: scaleIn 300ms ease-out backwards;
@@ -1554,6 +1636,10 @@
       // Filtering logic
       const filterSessions = () => {
         state.filteredSessions = state.sessions.filter(session => {
+          // Always show breaks regardless of filters
+          if (session.type === 'break') {
+            return true;
+          }
           // Category filter
           if (!state.activeFilters.has(session.category)) {
             return false;
@@ -2236,6 +2322,9 @@
       };
 
       const createSessionCard = (session) => {
+        if (session.type === 'break') {
+          return createBreakCard(session);
+        }
         const card = document.createElement('article');
         card.className = `session-card ${session.category} ${state.expandedSessions.has(session.id) ? 'expanded' : ''}`;
         card.setAttribute('data-lab-type', session.labType);
@@ -2322,6 +2411,45 @@
             toggleSessionExpansion(session.id);
           }
         });
+
+        return card;
+      };
+
+      const createBreakCard = (breakItem) => {
+        const card = document.createElement('div');
+        card.className = `break-card ${breakItem.category} ${state.expandedSessions.has(breakItem.id) ? 'expanded' : ''}`;
+        card.setAttribute('data-break-id', breakItem.id);
+        card.setAttribute('data-session-id', breakItem.id); // So it works with existing expansion logic
+
+        card.innerHTML = `
+          <div class="break-header">
+            <div class="break-time">${breakItem.startTime} - ${breakItem.endTime}</div>
+            <div class="break-icon">☕</div>
+          </div>
+          <div class="break-title">${breakItem.title}</div>
+          ${breakItem.description ? `
+            <div class="break-description">
+              <div class="break-description-inner">${breakItem.description}</div>
+            </div>
+          ` : ''}
+        `;
+
+        // Add click handler for expansion (only if there's a description)
+        if (breakItem.description) {
+          card.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleSessionExpansion(breakItem.id);
+          });
+
+          card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleSessionExpansion(breakItem.id);
+            }
+          });
+        }
 
         return card;
       };
