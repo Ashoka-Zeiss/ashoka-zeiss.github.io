@@ -183,6 +183,7 @@
 
     .course-title {
       font-size: 1.5rem;
+      padding-left: 12px;
       font-weight: 600;
       line-height: var(--line-height-heading);
       color: var(--color-text-primary);
@@ -191,6 +192,7 @@
 
     .course-subtitle {
       font-size: 0.875rem;
+      padding-left: 12px;
       color: var(--color-text-secondary);
       margin: 0;
       font-weight: 400;
@@ -199,6 +201,147 @@
     .header-right {
       display: flex;
       align-items: center;
+    }
+
+    .title-short {
+      display: none;
+    }
+
+    /* Enhanced Mobile Header Responsiveness */
+    @media (max-width: 1024px) {
+      .course-title {
+        font-size: 1.375rem;
+        padding-left: 10px;
+      }
+
+      .course-subtitle {
+        font-size: 0.8125rem;
+        padding-left: 10px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        gap: var(--space-md);
+      }
+
+      .header-left {
+        gap: var(--space-md);
+        flex: 1;
+        min-width: 0;
+        /* Allow text to shrink */
+      }
+
+      .header-text {
+        flex: 1;
+        min-width: 0;
+        /* Allow text to shrink */
+      }
+
+      .course-title {
+        font-size: 1.25rem;
+        line-height: 1.2;
+        padding-left: 10px;
+        word-wrap: break-word;
+        hyphens: auto;
+      }
+
+      .course-subtitle {
+        font-size: 0.75rem;
+        padding-left: 10px;
+        line-height: 1.3;
+      }
+
+      .header-right {
+        flex-shrink: 0;
+        /* Prevent theme button from shrinking */
+      }
+    }
+
+    @media (max-width: 640px) {
+      .main-header {
+        padding: var(--space-md) 0;
+      }
+
+      .header-left {
+        gap: var(--space-sm);
+      }
+
+      .course-title {
+        font-size: 1.125rem;
+        padding-left: 6px;
+        line-height: 1.2;
+      }
+
+      .course-subtitle {
+        padding-left: 6px;
+        font-size: 0.6875rem;
+        line-height: 1.3;
+      }
+
+      .logo-section {
+        height: 40px;
+        width: 40px;
+      }
+    }
+
+    /* Very small screens - stack layout if needed */
+    @media (max-width: 480px) {
+      .header-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-md);
+      }
+
+      .header-left {
+        width: 100%;
+        gap: var(--space-md);
+      }
+
+      .header-right {
+        position: absolute;
+        top: var(--space-md);
+        right: var(--space-md);
+      }
+
+      .title-full {
+        display: none;
+      }
+
+      .title-short {
+        display: inline;
+      }
+
+      .course-title {
+        font-size: 1.25rem;
+        padding-left: 6px;
+        padding-right: 60px;
+        /* Make room for theme button */
+      }
+
+      .course-subtitle {
+        font-size: 0.75rem;
+        padding-left: 6px;
+        padding-right: 60px;
+        /* Make room for theme button */
+      }
+    }
+
+    /* Extra small screens */
+    @media (max-width: 360px) {
+      .course-title {
+        font-size: 1.125rem;
+        padding-right: 60px;
+      }
+
+      .course-subtitle {
+        font-size: 0.6875rem;
+      }
+
+      .logo-section {
+        height: 36px;
+        width: 36px;
+      }
     }
 
     /* Footer */
@@ -1486,12 +1629,6 @@
         /* header */
       }
 
-      .header {
-        flex-direction: column;
-        gap: var(--space-md);
-        align-items: flex-start;
-      }
-
       .theme-toggle {
         position: absolute;
         top: var(--space-md);
@@ -1678,7 +1815,10 @@
             <img src="./assets/logo-dark.svg" alt="Course Logo" class="header-logo dark-logo">
           </div>
           <div class="header-text">
-            <h1 class="course-title">Professional Course in Advanced Microscopy</h1>
+            <h1 class="course-title">
+              <span class="title-full">Professional Course in Advanced Microscopy</span>
+              <span class="title-short">Advanced Microscopy Course</span>
+            </h1>
             <p class="course-subtitle">by Ashoka University and ZEISS Research Microscopy Solutions</p>
           </div>
         </div>
