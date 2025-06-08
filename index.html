@@ -2416,6 +2416,17 @@
       };
 
       const createBreakCard = (breakItem) => {
+        // Icon mapping based on break type
+        const getBreakIcon = (breakType) => {
+          const icons = {
+            coffee: '☕',
+            breakfast: '🥐',
+            lunch: '🥗',
+            dinner: '🍽️'
+          };
+          return icons[breakType] || '☕'; // Default to coffee if type not found
+        };
+
         const card = document.createElement('div');
         card.className = `break-card ${breakItem.category} ${state.expandedSessions.has(breakItem.id) ? 'expanded' : ''}`;
         card.setAttribute('data-break-id', breakItem.id);
@@ -2424,7 +2435,7 @@
         card.innerHTML = `
           <div class="break-header">
             <div class="break-time">${breakItem.startTime} - ${breakItem.endTime}</div>
-            <div class="break-icon">☕</div>
+            <div class="break-icon">${getBreakIcon(breakItem.breakType)}</div>
           </div>
           <div class="break-title">${breakItem.title}</div>
           ${breakItem.description ? `

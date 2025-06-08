@@ -90,6 +90,18 @@
       "endTime": "13:15",
       "title": "Coffee Break",
       "type": "break",
+      "breakType": "coffee",
+      "category": "campus",
+      "description": "Networking and refreshments in the main lobby"
+    },
+    {
+      "id": "break-2",
+      "date": "2025-06-10",
+      "startTime": "14:00",
+      "endTime": "14:20",
+      "title": "Lunch Break",
+      "type": "break",
+      "breakType": "lunch",
       "category": "campus",
       "description": "Networking and refreshments in the main lobby"
     },
