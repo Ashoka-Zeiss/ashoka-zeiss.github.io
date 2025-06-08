@@ -301,6 +301,7 @@
     }
 
     /* Responsive Footer */
+    /* Enhanced Responsive Footer */
     @media (max-width: 1024px) {
       .footer-content {
         grid-template-columns: 1fr 1fr;
@@ -309,43 +310,109 @@
 
       .footer-section:first-child {
         grid-column: 1 / -1;
+        margin-bottom: var(--space-md);
       }
     }
 
-    @media (max-width: 767px) {
+    /* Smart 2-column layout for tablets and small laptops */
+    @media (max-width: 768px) {
       .footer-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
         gap: var(--space-lg);
-        text-align: center;
+        text-align: left;
+        /* Keep left-aligned for better readability */
       }
 
       .footer-section:first-child {
-        grid-column: 1;
+        grid-column: 1 / -1;
         text-align: center;
+        margin-bottom: var(--space-lg);
+        padding-bottom: var(--space-lg);
+        border-bottom: 1px solid var(--color-border);
       }
 
-      .footer-bottom {
-        flex-direction: column;
-        gap: var(--space-sm);
-        text-align: center;
-      }
-
-      .footer-links {
-        align-items: center;
+      /* Make sure Quick Links and Contact sit side by side */
+      .footer-section:nth-child(2),
+      .footer-section:nth-child(3) {
+        text-align: left;
       }
     }
 
+    /* Compact mobile layout */
     @media (max-width: 480px) {
       .main-footer {
         padding: var(--space-xl) 0 var(--space-md) 0;
       }
 
       .footer-content {
+        grid-template-columns: 1fr 1fr;
         gap: var(--space-md);
+        text-align: left;
+      }
+
+      .footer-section:first-child {
+        grid-column: 1 / -1;
+        text-align: center;
+        margin-bottom: var(--space-md);
+        padding-bottom: var(--space-md);
+      }
+
+      /* Compact headings on mobile */
+      .footer-heading {
+        font-size: 1rem;
+        line-height: 1.3;
+      }
+
+      .footer-subheading {
+        font-size: 0.75rem;
+        margin-bottom: var(--space-xs);
+      }
+
+      .footer-description {
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+
+      .footer-links {
+        gap: var(--space-xs);
+      }
+
+      .footer-link {
+        font-size: 0.8rem;
+      }
+
+      /* Compact bottom section */
+      .footer-bottom {
+        flex-direction: column;
+        gap: var(--space-xs);
+        text-align: center;
+        padding-top: var(--space-md);
+      }
+
+      .footer-copyright,
+      .footer-credits {
+        font-size: 0.7rem;
+        line-height: 1.4;
+      }
+    }
+
+    /* Very small screens - keep 2 columns but make more compact */
+    @media (max-width: 320px) {
+      .footer-content {
+        gap: var(--space-sm);
+      }
+
+      .footer-section:first-child {
+        margin-bottom: var(--space-sm);
+        padding-bottom: var(--space-sm);
       }
 
       .footer-heading {
-        font-size: 1rem;
+        font-size: 0.9rem;
+      }
+
+      .footer-subheading {
+        font-size: 0.7rem;
       }
     }
 
