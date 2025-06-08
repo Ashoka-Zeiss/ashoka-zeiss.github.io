@@ -739,6 +739,7 @@
       background-color: var(--category-color);
     }
 
+    /** Remove top coloured bar since we don't need `labtype`
     .session-card::after {
       content: '';
       position: absolute;
@@ -749,6 +750,7 @@
       background-color: var(--lab-type-color);
       opacity: 0.6;
     }
+    **/
 
     .session-card.online {
       --category-color: var(--color-online);
@@ -762,6 +764,7 @@
       --category-color: var(--color-offcampus);
     }
 
+    /**
     .session-card[data-lab-type="theory"] {
       --lab-type-color: var(--color-theory);
     }
@@ -777,6 +780,7 @@
     .session-card[data-lab-type="computational"] {
       --lab-type-color: var(--color-computational);
     }
+    **/
 
     .session-card:hover {
       background-color: var(--color-surface-hover);
@@ -842,12 +846,13 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .session-lab-type {
+    .session-category-text {
       font-size: 0.625rem;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--lab-type-color);
+      color: var(--category-color);
+      /* Use the same color as left border */
       background-color: rgba(255, 255, 255, 0.05);
       padding: 2px 6px;
       border-radius: 4px;
@@ -2327,7 +2332,8 @@
         }
         const card = document.createElement('article');
         card.className = `session-card ${session.category} ${state.expandedSessions.has(session.id) ? 'expanded' : ''}`;
-        card.setAttribute('data-lab-type', session.labType);
+        // FEAT: we don't need different lab types
+        // card.setAttribute('data-lab-type', session.labType);
         card.setAttribute('data-session-id', session.id);
         card.setAttribute('role', 'button');
         card.setAttribute('aria-expanded', state.expandedSessions.has(session.id));
@@ -2341,12 +2347,20 @@
         time.className = 'session-time';
         time.textContent = `${session.startTime} - ${session.endTime}`;
 
-        const labType = document.createElement('div');
-        labType.className = 'session-lab-type';
-        labType.textContent = session.labType.replace('-', ' ');
+        const categoryText = document.createElement('div');
+        categoryText.className = 'session-category-text';
+
+        // Map category to display text
+        const categoryLabels = {
+          'online': 'Live Online',
+          'campus': 'Classroom',
+          'offcampus': 'Lab'
+        };
+
+        categoryText.textContent = categoryLabels[session.category] || session.category;
 
         header.appendChild(time);
-        header.appendChild(labType);
+        header.appendChild(categoryText);
 
         // Basic info
         const title = document.createElement('h3');
