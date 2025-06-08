@@ -866,9 +866,63 @@
     }
 
     .session-capacity {
-      font-size: 0.75rem;
+      display: none;
+      /*font-size: 0.75rem;
       color: var(--color-text-muted);
+      margin-top: var(--space-xs);*/
+    }
+
+    /* Style for venue display */
+    .session-venue {
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
       margin-top: var(--space-xs);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .session-venue a {
+      color: var(--color-online);
+      text-decoration: none;
+      transition: all var(--transition-base);
+    }
+
+    .session-venue a:hover {
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
+
+    /* Update day header for dates */
+    .day-header {
+      margin-bottom: var(--space-md);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid var(--color-border);
+      position: relative;
+      text-align: center;
+    }
+
+    .day-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-secondary);
+      margin-bottom: 2px;
+    }
+
+    .day-date {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      line-height: 1;
+    }
+
+    .day-month {
+      font-size: 0.625rem;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      margin-top: 2px;
     }
 
     .session-capacity.full {
@@ -1291,116 +1345,7 @@
 
   <script>
     // Sample JSON data structure (in production, this would be in a separate file)
-    const CONFERENCE_DATA = {
-      "metadata": {
-        "conferenceStart": "2025-06-16",
-        "conferenceEnd": "2025-08-30",
-        "timezone": "America/New_York",
-        "defaultSessionDuration": 90,
-        "timeSlots": ["00:00", "01:30", "03:00", "04:30"]
-      },
-      "instructors": {
-        "sarah-chen": {
-          "id": "sarah-chen",
-          "name": "Dr. Sarah Chen",
-          "title": "Principal Investigator",
-          "specialization": "Confocal Microscopy",
-          "email": "s.chen@institute.edu"
-        },
-        "james-wilson": {
-          "id": "james-wilson",
-          "name": "Prof. James Wilson",
-          "title": "Director of Imaging Core",
-          "specialization": "Two-Photon Microscopy"
-        },
-        "maria-garcia": {
-          "id": "maria-garcia",
-          "name": "Maria Garcia",
-          "title": "Lab Manager",
-          "specialization": "Sample Preparation"
-        },
-        "alex-thompson": {
-          "id": "alex-thompson",
-          "name": "Dr. Alex Thompson",
-          "title": "Computational Biologist",
-          "specialization": "Image Analysis"
-        }
-      },
-      "sessionTemplates": [
-        {
-          "id": "confocal-basics",
-          "title": "Confocal Microscopy Fundamentals",
-          "category": "campus",
-          "labType": "theory",
-          "capacity": 30,
-          "duration": 120,
-          "prerequisites": null,
-          "equipment": ["Zeiss LSM 980"],
-          "description": "Introduction to confocal microscopy principles, including point scanning, optical sectioning, and fluorescence basics."
-        },
-        {
-          "id": "two-photon-workshop",
-          "title": "Two-Photon Imaging Workshop",
-          "category": "campus",
-          "labType": "wet-lab",
-          "capacity": 8,
-          "duration": 180,
-          "prerequisites": "confocal-basics",
-          "equipment": ["Bruker Ultima 2P"],
-          "description": "Hands-on training with two-photon microscopy for deep tissue imaging. Includes live sample preparation."
-        },
-        {
-          "id": "image-analysis",
-          "title": "Image Analysis with ImageJ/FIJI",
-          "category": "online",
-          "labType": "computational",
-          "capacity": 50,
-          "duration": 90,
-          "prerequisites": null,
-          "equipment": [],
-          "description": "Comprehensive workshop on image processing, quantification, and batch analysis using open-source tools."
-        }
-      ],
-      "schedule": []
-    };
-
-    // Generate schedule based on templates
-    const generateSchedule = () => {
-      const schedule = [];
-      const start = new Date(CONFERENCE_DATA.metadata.conferenceStart);
-      const end = new Date(CONFERENCE_DATA.metadata.conferenceEnd);
-      const templates = CONFERENCE_DATA.sessionTemplates;
-      const instructorIds = Object.keys(CONFERENCE_DATA.instructors);
-
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        // Skip weekends
-        if (d.getDay() === 0 || d.getDay() === 6) continue;
-
-        // 2-4 sessions per day
-        const sessionsPerDay = Math.floor(Math.random() * 3) + 2;
-        const daySlots = [...CONFERENCE_DATA.metadata.timeSlots];
-
-        for (let i = 0; i < sessionsPerDay && i < daySlots.length; i++) {
-          const template = templates[Math.floor(Math.random() * templates.length)];
-          const instructor = instructorIds[Math.floor(Math.random() * instructorIds.length)];
-          const timeSlot = daySlots[i];
-
-          schedule.push({
-            id: `session-${d.toISOString().split('T')[0]}-${i}`,
-            date: d.toISOString().split('T')[0],
-            startTime: timeSlot,
-            templateId: template.id,
-            instructorId: instructor,
-            enrolled: Math.floor(Math.random() * template.capacity * 0.8)
-          });
-        }
-      }
-
-      return schedule;
-    };
-
-    // Set the schedule
-    CONFERENCE_DATA.schedule = generateSchedule();
+    const CONFERENCE_DATA = null;
 
     // Namespace for our application
     const ConferenceSchedule = (() => {
@@ -1426,50 +1371,40 @@
       // Data loading and parsing
       const loadConferenceData = async () => {
         try {
-          // In production, this would be: const response = await fetch('./data/conference.json');
-          // For now, we'll use the embedded data
-          state.conferenceData = CONFERENCE_DATA;
+          // Fetch the JSON file
+          const response = await fetch('./data/conference.json');
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          state.conferenceData = await response.json();
 
           // Set conference dates
           CONFERENCE_START = new Date(state.conferenceData.metadata.conferenceStart);
           CONFERENCE_END = new Date(state.conferenceData.metadata.conferenceEnd);
 
-          // Parse sessions
-          state.sessions = state.conferenceData.schedule.map(scheduleItem => {
-            const template = state.conferenceData.sessionTemplates.find(t => t.id === scheduleItem.templateId);
-            const instructor = state.conferenceData.instructors[scheduleItem.instructorId];
-
-            return {
-              id: scheduleItem.id,
-              date: scheduleItem.date,
-              startTime: scheduleItem.startTime,
-              endTime: addMinutes(scheduleItem.startTime, template.duration),
-              title: template.title,
-              instructor: instructor.name,
-              instructorTitle: instructor.title,
-              category: template.category,
-              labType: template.labType,
-              capacity: template.capacity,
-              enrolled: scheduleItem.enrolled,
-              prerequisites: template.prerequisites,
-              description: template.description,
-              location: getLocation(template)
-            };
-          });
+          // TODO: there are two copies of schedule in state. Remove one
+          state.sessions = state.conferenceData.schedule;
 
           return true;
         } catch (error) {
           console.error('Failed to load conference data:', error);
+
+          // Show user-friendly error
+          const weekGrid = document.getElementById('weekGrid');
+          weekGrid.innerHTML = `
+            <div class="empty-state" style="grid-column: 1 / -1; padding: var(--space-2xl); text-align: center;">
+                <h3>Unable to load schedule</h3>
+                <p>Please check your connection and refresh the page.</p>
+                <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin-top: var(--space-md);">
+                    Error: ${error.message}
+                </p>
+            </div>
+        `;
+
           return false;
         }
-      };
-
-      const getLocation = (template) => {
-        if (template.category === 'online') return 'Zoom Room A';
-        if (template.category === 'campus') {
-          return template.labType === 'wet-lab' ? 'Building 3, Imaging Core' : 'Building 2, Computer Lab';
-        }
-        return 'Partner Institute, Room 201';
       };
 
       // Utility functions
@@ -1869,6 +1804,14 @@
         dayDate.className = 'day-date';
         dayDate.textContent = date.getDate();
 
+        const dayMonth = document.createElement('div');
+        dayMonth.className = 'day-month';
+        dayMonth.textContent = date.toLocaleDateString('en-US', {month: 'short'});
+
+        dayHeader.appendChild(dayName);
+        dayHeader.appendChild(dayDate);
+        dayHeader.appendChild(dayMonth);
+
         // Session density indicator
         const dateStr = date.toISOString().split('T')[0];
         const daySessions = state.filteredSessions
@@ -2188,10 +2131,10 @@
         const card = document.createElement('article');
         card.className = `session-card ${session.category} ${state.expandedSessions.has(session.id) ? 'expanded' : ''}`;
         card.setAttribute('data-lab-type', session.labType);
+        card.setAttribute('data-session-id', session.id);
         card.setAttribute('role', 'button');
         card.setAttribute('aria-expanded', state.expandedSessions.has(session.id));
         card.setAttribute('tabindex', '0');
-        card.setAttribute('data-session-id', session.id);
 
         // Header with time and lab type
         const header = document.createElement('div');
@@ -2217,28 +2160,27 @@
         instructor.className = 'session-instructor';
         instructor.textContent = session.instructor;
 
-        // Capacity info
-        const capacity = document.createElement('div');
-        capacity.className = `session-capacity ${session.enrolled >= session.capacity ? 'full' : ''}`;
-        capacity.textContent = `${session.enrolled}/${session.capacity} participants`;
+        // Venue - visible immediately
+        const venue = document.createElement('div');
+        venue.className = 'session-venue';
+
+        if (session.category === 'online' && session.zoomLink) {
+          venue.innerHTML = `📍 <a href="${session.zoomLink}" target="_blank" rel="noopener noreferrer">Join Zoom</a>`;
+        } else if (session.location) {
+          venue.innerHTML = `📍 ${session.location}`;
+        }
 
         card.appendChild(header);
         card.appendChild(title);
         card.appendChild(instructor);
-        card.appendChild(capacity);
+        card.appendChild(venue);
 
-        // Expanded details
+        // Expanded details (no location here anymore)
         const details = document.createElement('div');
         details.className = 'session-details';
 
         const detailsInner = document.createElement('div');
         detailsInner.className = 'session-details-inner';
-
-        const location = document.createElement('div');
-        location.className = 'session-location';
-        location.textContent = `📍 ${session.location}`;
-
-        detailsInner.appendChild(location);
 
         if (session.prerequisites) {
           const prerequisites = document.createElement('div');
@@ -2257,10 +2199,14 @@
 
         // Event listeners
         card.addEventListener('click', (e) => {
+          // Don't toggle if clicking on a link
+          if (e.target.tagName === 'A') return;
+
           e.preventDefault();
           e.stopPropagation();
-          toggleSessionExpansion(session.id)
+          toggleSessionExpansion(session.id);
         });
+
         card.addEventListener('keydown', (e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -2388,14 +2334,12 @@
       const handleTodayButton = () => {
         const today = new Date();
 
-        // For testing purposes, use a date within the conference range
-        const testDate = new Date('2024-03-15'); // Middle of conference
-
         let targetDate;
         if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
           targetDate = today;
         } else {
-          targetDate = testDate;
+          // TODO: add helpful error that today's date is outside conference margins
+          targetDate = today;
         }
 
         switch (state.currentView) {
