@@ -301,7 +301,6 @@
     }
 
     /* Responsive Footer */
-    /* Enhanced Responsive Footer */
     @media (max-width: 1024px) {
       .footer-content {
         grid-template-columns: 1fr 1fr;
@@ -3136,7 +3135,8 @@
         const today = new Date();
         if (state.currentView === 'month') {
           // For month view, set to first day of current month
-          state.currentWeekStart = new Date(today.getFullYear(), today.getMonth(), 1);
+          // state.currentWeekStart = new Date(today.getFullYear(), today.getMonth(), 1);
+          state.currentWeekStart = getWeekStart(today);
         } else {
           // For week view, set to start of current week
           state.currentWeekStart = getWeekStart(today);
