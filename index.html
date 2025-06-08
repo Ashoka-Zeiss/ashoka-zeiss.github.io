@@ -868,6 +868,21 @@
     .session-instructor {
       font-size: 0.875rem;
       color: var(--color-text-secondary);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .instructor-name {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+    }
+
+    .instructor-title {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      font-style: italic;
     }
 
     .session-capacity {
@@ -2369,9 +2384,19 @@
 
         const instructor = document.createElement('div');
         instructor.className = 'session-instructor';
-        instructor.textContent = session.instructor;
 
-        // Venue - visible immediately
+        // Create instructor name and title
+        const instructorName = document.createElement('div');
+        instructorName.className = 'instructor-name';
+        instructorName.textContent = session.instructor;
+
+        const instructorTitle = document.createElement('div');
+        instructorTitle.className = 'instructor-title';
+        instructorTitle.textContent = session.instructorTitle;
+
+        instructor.appendChild(instructorName);
+        instructor.appendChild(instructorTitle);
+
         const venue = document.createElement('div');
         venue.className = 'session-venue';
 
