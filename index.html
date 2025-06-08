@@ -883,36 +883,77 @@
     }
 
     /* View Switcher */
+    /* View Switcher - Redesigned */
     .view-switcher {
       display: flex;
-      gap: var(--space-xs);
+      gap: 4px;
       background-color: var(--color-surface);
       padding: 4px;
-      border-radius: var(--border-radius);
-      margin-bottom: var(--space-lg);
+      border-radius: 10px;
+      margin-bottom: var(--space-xl);
+      width: fit-content;
+      box-shadow: var(--shadow-sm);
     }
 
     .view-button {
       background: none;
       border: none;
       color: var(--color-text-secondary);
-      padding: var(--space-xs) var(--space-md);
-      border-radius: 6px;
+      padding: 8px 20px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 0.875rem;
+      font-size: 14px;
       font-weight: 500;
-      transition: all var(--transition-base);
+      transition: all var(--transition-smooth);
+      position: relative;
     }
 
     .view-button:hover {
       color: var(--color-text-primary);
-      background-color: var(--color-surface-hover);
     }
 
     .view-button.active {
       background-color: var(--color-bg);
       color: var(--color-text-primary);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-sm);
+    }
+
+    /* Add smooth transition for active state */
+    .view-button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 8px;
+      background-color: var(--color-bg);
+      opacity: 0;
+      transition: opacity var(--transition-smooth);
+      z-index: -1;
+    }
+
+    .view-button.active::before {
+      opacity: 1;
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+      .view-switcher {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: var(--space-lg);
+      }
+
+      .view-button {
+        flex: 1;
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .view-button {
+        padding: 8px 12px;
+        font-size: 12px;
+      }
     }
 
     /* Month View Styles */
@@ -1040,29 +1081,35 @@
 
     .search-input {
       width: 100%;
-      background-color: var(--color-surface);
+      background-color: var(--color-bg);
       border: 1px solid var(--color-border);
       color: var(--color-text-primary);
-      padding: var(--space-sm) var(--space-md);
-      padding-left: 2.5rem;
-      border-radius: var(--border-radius);
-      font-size: 0.875rem;
-      transition: all var(--transition-base);
+      padding: 12px 16px 12px 44px;
+      border-radius: var(--border-radius-lg);
+      font-size: 15px;
+      transition: all var(--transition-smooth);
+      box-shadow: var(--shadow-sm);
     }
 
     .search-input:focus {
       outline: none;
-      border-color: var(--color-accent);
-      background-color: var(--color-surface-hover);
+      border-color: #007aff;
+      box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+    }
+
+    .search-input::placeholder {
+      color: var(--color-text-muted);
     }
 
     .search-icon {
       position: absolute;
-      left: var(--space-md);
+      left: 16px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--color-text-muted);
       pointer-events: none;
+      width: 20px;
+      height: 20px;
     }
 
     /* Week Grid */
@@ -1717,8 +1764,118 @@
         max-width: 120px;
       }
 
+      /* Filters */
       .filters {
-        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        margin-bottom: var(--space-md);
+        align-items: center;
+      }
+
+      .filter-group {
+        display: flex;
+        gap: var(--space-sm);
+        flex-wrap: wrap;
+        background-color: var(--color-surface);
+        padding: 4px;
+        border-radius: 10px;
+        box-shadow: var(--shadow-sm);
+      }
+
+      .filter-button {
+        background-color: transparent;
+        border: none;
+        color: var(--color-text-secondary);
+        padding: 8px 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all var(--transition-smooth);
+        font-size: 14px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+      }
+
+      .filter-button::before {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: currentColor;
+        opacity: 0.5;
+        transition: all var(--transition-smooth);
+      }
+
+      .filter-button:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: var(--color-text-primary);
+      }
+
+      [data-theme="dark"] .filter-button:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      .filter-button.active {
+        background-color: white;
+        color: var(--color-text-primary);
+        box-shadow: var(--shadow-sm);
+      }
+
+      [data-theme="dark"] .filter-button.active {
+        background-color: #2a2a2a;
+        color: var(--color-text-primary);
+      }
+
+      .filter-button.active::before {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+
+      /* Maintain category colors */
+      .filter-button.online {
+        color: var(--color-online);
+      }
+
+      .filter-button.campus {
+        color: var(--color-campus);
+      }
+
+      .filter-button.offcampus {
+        color: var(--color-offcampus);
+      }
+
+      @media (max-width: 768px) {
+        .filters {
+          justify-content: center;
+        }
+
+        .filter-group {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .search-container {
+          margin-bottom: var(--space-md);
+        }
+
+        .search-input {
+          font-size: 16px;
+          /* Prevent zoom on iOS */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .filter-button {
+          padding: 6px 12px;
+          font-size: 13px;
+        }
+
+        .filter-button::before {
+          width: 6px;
+          height: 6px;
+        }
       }
 
       .day-column {
