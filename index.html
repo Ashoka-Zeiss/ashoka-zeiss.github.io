@@ -642,10 +642,11 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--space-lg);
-      background-color: var(--color-surface);
-      padding: var(--space-md);
-      border-radius: var(--border-radius);
+      margin-bottom: var(--space-xl);
+      background-color: var(--color-bg);
+      padding: 24px 32px;
+      border-radius: var(--border-radius-xl);
+      box-shadow: var(--shadow-lg);
       position: relative;
     }
 
@@ -656,15 +657,17 @@
     }
 
     .week-nav__current {
-      font-weight: 500;
+      font-size: 28px;
+      font-weight: 700;
       color: var(--color-text-primary);
+      letter-spacing: -0.02em;
     }
 
     .week-nav__stats {
-      font-size: 0.75rem;
+      font-size: 14px;
       color: var(--color-text-secondary);
       display: flex;
-      gap: var(--space-md);
+      gap: var(--space-lg);
     }
 
     /* Time Context Section */
@@ -761,42 +764,62 @@
 
     .week-nav__controls {
       display: flex;
-      gap: var(--space-sm);
+      align-items: center;
+      gap: 12px;
     }
 
     .week-nav__button {
-      background: none;
-      border: 1px solid var(--color-border);
+      width: 44px;
+      height: 44px;
+      border-radius: var(--border-radius-lg);
+      border: none;
+      background: var(--color-surface);
       color: var(--color-text-primary);
-      padding: var(--space-xs) var(--space-md);
-      border-radius: var(--border-radius);
       cursor: pointer;
-      transition: all var(--transition-base);
-      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-smooth);
+      box-shadow: var(--shadow-sm);
+      font-size: 14px;
       font-weight: 500;
     }
 
-    .week-nav__button:hover {
-      background-color: var(--color-surface-hover);
-      border-color: var(--color-accent);
+    /* Special styling for prev/next buttons */
+    .week-nav__button#prevWeek,
+    .week-nav__button#nextWeek {
+      padding: 0;
+    }
+
+    /* Today button special style */
+    .week-nav__button#todayButton {
+      width: auto;
+      padding: 12px 24px;
+      background: #007aff;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 122, 255, 0.2);
+    }
+
+    .week-nav__button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .week-nav__button#todayButton:hover:not(:disabled) {
+      background: #0051d5;
+      box-shadow: 0 4px 16px rgba(0, 122, 255, 0.3);
+    }
+
+    .week-nav__button:active:not(:disabled) {
+      transform: translateY(0);
     }
 
     .week-nav__button:disabled {
       opacity: 0.3;
       cursor: not-allowed;
-      background-color: transparent;
-      border-color: var(--color-border);
-    }
-
-    .week-nav__button:disabled:hover {
-      background-color: transparent;
-      border-color: var(--color-border);
       transform: none;
-    }
-
-    .week-nav__current {
-      font-weight: 500;
-      color: var(--color-text-primary);
+      box-shadow: none;
     }
 
     /* Filters */
@@ -1647,7 +1670,7 @@
     }
 
     /* Mobile Optimizations */
-    @media (max-width: 767px) {
+    @media (max-width: 768px) {
       .container {
         max-width: var(--container-max);
         margin: 0 auto;
@@ -1663,8 +1686,35 @@
       }
 
       .week-nav {
+        padding: 20px;
         flex-direction: column;
         gap: var(--space-md);
+      }
+
+      .week-nav__current {
+        font-size: 24px;
+        text-align: center;
+      }
+
+      .week-nav__stats {
+        justify-content: center;
+        font-size: 13px;
+        gap: var(--space-md);
+      }
+
+      .week-nav__controls {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .week-nav__button {
+        width: 48px;
+        height: 48px;
+      }
+
+      .week-nav__button#todayButton {
+        flex: 1;
+        max-width: 120px;
       }
 
       .filters {
@@ -1673,6 +1723,21 @@
 
       .day-column {
         margin-bottom: var(--space-md);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .week-nav {
+        padding: 16px;
+        margin-bottom: var(--space-lg);
+      }
+
+      .week-nav__current {
+        font-size: 20px;
+      }
+
+      .week-nav__stats {
+        font-size: 12px;
       }
     }
 
@@ -1870,13 +1935,13 @@
       </div>
       <div class="week-nav__controls">
         <button class="week-nav__button" id="prevWeek" aria-label="Previous week">
-          ← Previous
+          ←
         </button>
         <button class="week-nav__button" id="todayButton" aria-label="Go to today">
           Today
         </button>
         <button class="week-nav__button" id="nextWeek" aria-label="Next week">
-          Next →
+          →
         </button>
       </div>
     </nav>
