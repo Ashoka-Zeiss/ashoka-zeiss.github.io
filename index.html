@@ -1403,8 +1403,8 @@
     </div>
 
     <div class="view-switcher" role="tablist" aria-label="View options">
-      <button class="view-button" role="tab" data-view="month" aria-selected="false">Month</button>
-      <button class="view-button active" role="tab" data-view="week" aria-selected="true">Week</button>
+      <button class="view-button active" role="tab" data-view="month" aria-selected="false">Month</button>
+      <button class="view-button" role="tab" data-view="week" aria-selected="true">Week</button>
       <button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>
     </div>
 
@@ -1447,7 +1447,7 @@
         searchQuery: '',
         expandedSessions: new Set(),
         conferenceData: null,
-        currentView: 'week'
+        currentView: 'month'
       };
 
       // Constants
@@ -2724,12 +2724,16 @@
           // Error UI is already shown by loadConferenceData
           return;
         }
-        // Set initial week
+
+        // TODO: add error handling when today is outside conference boundaries
+        // Set initial date to today (regardless of conference dates)
         const today = new Date();
-        if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
-          state.currentWeekStart = getWeekStart(today);
+        if (state.currentView === 'month') {
+          // For month view, set to first day of current month
+          state.currentWeekStart = new Date(today.getFullYear(), today.getMonth(), 1);
         } else {
-          state.currentWeekStart = getWeekStart(CONFERENCE_START);
+          // For week view, set to start of current week
+          state.currentWeekStart = getWeekStart(today);
         }
 
         // Initialize modal event listeners (add this to your init function)
