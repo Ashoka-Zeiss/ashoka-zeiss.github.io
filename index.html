@@ -1370,38 +1370,146 @@
 
       // Data loading and parsing
       const loadConferenceData = async () => {
-        try {
-          // Fetch the JSON file
-          const response = await fetch('./data/conference.json');
+        const weekGrid = document.getElementById('weekGrid');
 
+        try {
+          // Show loading state with more specific message
+          weekGrid.innerHTML = `
+<div class="loading" style="grid-column: 1 / -1;">
+  <div style="margin-bottom: var(--space-md);">Loading conference schedule...</div>
+  <div style="font-size: 0.875rem; color: var(--color-text-secondary);">
+    Fetching latest data from GitHub Pages
+  </div>
+</div>
+`;
+
+          // Fetch with timeout and cache-busting for immediate updates
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
+          const response = await fetch(`./data/conference.json?v=${Date.now()}`, {
+            signal: controller.signal,
+            headers: {
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+              'Expires': '0'
+            }
+          });
+
+          clearTimeout(timeoutId);
+
+          // Handle different HTTP error scenarios
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Failed to fetch schedule data (${response.status}: ${response.statusText})`);
           }
 
-          state.conferenceData = await response.json();
+          // Parse JSON with error handling
+          let jsonData;
+          try {
+            jsonData = await response.json();
+          } catch (parseError) {
+            throw new Error('Schedule data is corrupted or invalid. Please try again in a moment.');
+          }
 
-          // Set conference dates
+          // Validate required data structure
+          if (!jsonData || !jsonData.schedule || !Array.isArray(jsonData.schedule)) {
+            throw new Error('Schedule data is missing required information. Please contact support.');
+          }
+
+          if (!jsonData.metadata || !jsonData.metadata.conferenceStart || !jsonData.metadata.conferenceEnd) {
+            throw new Error('Conference dates are missing. Please contact support.');
+          }
+
+          // Validate that we have actual sessions
+          if (jsonData.schedule.length === 0) {
+            // This might be intentional (no sessions yet), so handle gracefully
+            weekGrid.innerHTML = `
+  <div class="empty-state" style="grid-column: 1 / -1; padding: var(--space-2xl); text-align: center;">
+    <h3>No Sessions Scheduled Yet</h3>
+    <p>The conference schedule is being updated. Please check back later.</p>
+    <button class="week-nav__button" onclick="window.location.reload()" style="margin-top: var(--space-lg);">
+      Refresh Schedule
+    </button>
+  </div>
+`;
+            return false;
+          }
+
+          // Success - store data and continue
+          state.conferenceData = jsonData;
           CONFERENCE_START = new Date(state.conferenceData.metadata.conferenceStart);
           CONFERENCE_END = new Date(state.conferenceData.metadata.conferenceEnd);
-
-          // TODO: there are two copies of schedule in state. Remove one
           state.sessions = state.conferenceData.schedule;
 
+          console.log(`✅ Loaded ${jsonData.schedule.length} sessions successfully`);
           return true;
-        } catch (error) {
-          console.error('Failed to load conference data:', error);
 
-          // Show user-friendly error
-          const weekGrid = document.getElementById('weekGrid');
+        } catch (error) {
+          console.error('Data loading failed:', error);
+
+          // Handle specific error types with user-friendly messages
+          let errorMessage = 'Unable to load the conference schedule';
+          let errorDetails = error.message;
+          let showRetry = true;
+
+          if (error.name === 'AbortError') {
+            errorMessage = 'Loading is taking longer than expected';
+            errorDetails = 'Please check your internet connection and try again.';
+          } else if (error.message.includes('Failed to fetch')) {
+            errorMessage = 'Cannot connect to the schedule server';
+            errorDetails = 'Please check your internet connection or try again in a moment.';
+          } else if (error.message.includes('404')) {
+            errorMessage = 'Schedule not found';
+            errorDetails = 'The schedule file may not be published yet. Please try again later.';
+          } else if (error.message.includes('corrupted') || error.message.includes('invalid')) {
+            errorMessage = 'Schedule data error';
+            errorDetails = error.message;
+          }
+
+          // Show comprehensive error UI
           weekGrid.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1; padding: var(--space-2xl); text-align: center;">
-                <h3>Unable to load schedule</h3>
-                <p>Please check your connection and refresh the page.</p>
-                <p style="font-size: 0.875rem; color: var(--color-text-secondary); margin-top: var(--space-md);">
-                    Error: ${error.message}
-                </p>
-            </div>
-        `;
+<div class="error-state" style="
+  grid-column: 1 / -1;
+  padding: var(--space-2xl);
+  text-align: center;
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--color-wet-lab);
+">
+  <div style="margin-bottom: var(--space-lg);">
+    <h3 style="color: var(--color-wet-lab); margin-bottom: var(--space-sm);">
+      ${errorMessage}
+    </h3>
+    <p style="color: var(--color-text-secondary); margin-bottom: var(--space-md);">
+      ${errorDetails}
+    </p>
+    <button class="week-nav__button" onclick="window.location.reload()">
+      🌐 Refresh Page
+    </button>
+  </div>
+
+  <details style="text-align: left; max-width: 600px; margin: 0 auto;">
+    <summary style="cursor: pointer; color: var(--color-text-secondary); font-size: 0.875rem;">
+      Technical Details
+    </summary>
+    <div style="
+      margin-top: var(--space-sm);
+      padding: var(--space-sm);
+      background-color: var(--color-bg);
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      word-break: break-all;
+    ">
+      Error: ${error.name || 'Unknown'}<br>
+      Message: ${error.message}<br>
+      Time: ${new Date().toLocaleString()}<br>
+      URL: ${window.location.href}
+    </div>
+  </details>
+</div>
+`;
 
           return false;
         }
@@ -2460,10 +2568,9 @@
         // Load conference data
         const dataLoaded = await loadConferenceData();
         if (!dataLoaded) {
-          weekGrid.innerHTML = '<div class="empty-state">Failed to load schedule. Please refresh the page.</div>';
+          // Error UI is already shown by loadConferenceData
           return;
         }
-
         // Set initial week
         const today = new Date();
         if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
