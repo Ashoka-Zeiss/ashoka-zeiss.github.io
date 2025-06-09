@@ -2253,6 +2253,125 @@
       }
     }
 
+    /* Mobile Controls */
+    .mobile-controls {
+      display: none;
+      gap: 12px;
+      margin-bottom: var(--space-md);
+      padding: 0 var(--space-md);
+    }
+
+    .mobile-search-container {
+      flex: 1;
+      position: relative;
+    }
+
+    .mobile-search-container .search-input {
+      width: 100%;
+      padding: 10px 16px 10px 40px;
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      background: var(--color-bg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mobile-filter-toggle {
+      position: relative;
+    }
+
+    .filter-toggle-btn {
+      padding: 10px 16px;
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: var(--border-radius);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .active-filter-count {
+      background: #007aff;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    /* Mobile Filters Dropdown */
+    .mobile-filters-dropdown {
+      display: none;
+      flex-direction: column;
+      gap: 8px;
+      padding: 12px var(--space-md);
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--space-md);
+    }
+
+    .mobile-filters-dropdown.show {
+      display: flex;
+    }
+
+    .mobile-filter-btn {
+      padding: 10px 16px;
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+    }
+
+    .mobile-filter-btn::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: currentColor;
+      margin-right: 8px;
+      opacity: 0.5;
+    }
+
+    .mobile-filter-btn.active {
+      background: white;
+      border-color: currentColor;
+    }
+
+    .mobile-filter-btn.active::before {
+      opacity: 1;
+    }
+
+    .mobile-filter-btn.online {
+      color: var(--color-online);
+    }
+
+    .mobile-filter-btn.campus {
+      color: var(--color-campus);
+    }
+
+    .mobile-filter-btn.offcampus {
+      color: var(--color-offcampus);
+    }
+
+    /* Show mobile controls only on mobile */
+    @media (max-width: 768px) {
+      .mobile-controls {
+        display: flex;
+      }
+
+      /* Update week nav margin on mobile */
+      .week-nav {
+        margin-bottom: var(--space-md);
+      }
+    }
+
     /* Mobile Bottom Navigation */
     .mobile-bottom-nav {
       display: none;
@@ -2444,6 +2563,40 @@
     </div>
     -->
 
+    <!-- Mobile Controls (search + filters) -->
+    <div class="mobile-controls">
+      <div class="mobile-search-container">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+        </svg>
+        <input type="search" class="search-input" placeholder="Search..." id="mobileSearchInput"
+          aria-label="Search sessions">
+      </div>
+
+      <div class="mobile-filter-toggle">
+        <button class="filter-toggle-btn" id="mobileFilterToggle">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M3 5h10v1H3V5zm0 3h7v1H3V8zm0 3h4v1H3v-1z" />
+          </svg>
+          <span class="active-filter-count">3</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Filter Dropdown -->
+    <div class="mobile-filters-dropdown" id="mobileFiltersDropdown">
+      <button class="mobile-filter-btn online active" data-category="online">
+        Live Online
+      </button>
+      <button class="mobile-filter-btn campus active" data-category="campus">
+        Classroom
+      </button>
+      <button class="mobile-filter-btn offcampus active" data-category="offcampus">
+        Lab
+      </button>
+    </div>
+
     <div class="controls-bar">
       <!-- Search -->
       <div class="search-container">
@@ -2577,7 +2730,9 @@
         </svg>
         <span>Week</span>
       </button>
-      <button class="bottom-nav-item" onclick='document.getElementById("searchInput").focus(); window.scrollTo(0, 0);'>
+      <!--<button class="bottom-nav-item" onclick='document.getElementById("searchInput").focus(); window.scrollTo(0, 0);'>-->
+      <button class="bottom-nav-item"
+        onclick='document.getElementById("mobileSearchInput").focus(); document.getElementById("mobileSearchInput").scrollIntoView({behavior: "smooth", block: "center"});'>
         <svg class="bottom-nav-icon" viewBox="0 0 24 24">
           <path
             d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
@@ -3849,8 +4004,6 @@
         renderView();
       };
 
-      // Add these functions after your existing functions
-
       const openDayModal = (date) => {
         const modal = document.getElementById('dayModalOverlay');
         const modalBody = document.getElementById('modalBody');
@@ -3924,6 +4077,34 @@
         }
       };
 
+      // Add this function for mobile filters toggle
+      const toggleMobileFilters = () => {
+        const dropdown = document.getElementById('mobileFiltersDropdown');
+        dropdown.classList.toggle('show');
+      }
+
+      // Sync mobile and desktop search inputs
+      document.getElementById('mobileSearchInput').addEventListener('input', (e) => {
+        document.getElementById('searchInput').value = e.target.value;
+        // Trigger the existing search handler
+        const event = new Event('input', {bubbles: true});
+        document.getElementById('searchInput').dispatchEvent(event);
+      });
+
+      // Sync mobile filter buttons with desktop
+      document.querySelectorAll('.mobile-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const category = btn.dataset.category;
+          const desktopBtn = document.querySelector(`.filter-button[data-category="${category}"]`);
+          if (desktopBtn) {
+            desktopBtn.click();
+            btn.classList.toggle('active');
+            // Update active count
+            const activeCount = document.querySelectorAll('.mobile-filter-btn.active').length;
+            document.querySelector('.active-filter-count').textContent = activeCount;
+          }
+        });
+      });
 
       // Initialize
       const init = async () => {
@@ -3992,6 +4173,14 @@
           document.documentElement.setAttribute('data-theme', newTheme);
           localStorage.setItem('theme', newTheme);
         });
+
+        const filterToggleBtn = document.getElementById('mobileFilterToggle');
+        if (filterToggleBtn) {
+          filterToggleBtn.addEventListener('click', () => {
+            const dropdown = document.getElementById('mobileFiltersDropdown');
+            dropdown.classList.toggle('show');
+          });
+        }
 
         // View switcher
         document.querySelectorAll('.view-button').forEach(button => {
