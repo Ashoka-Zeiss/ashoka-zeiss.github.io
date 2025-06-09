@@ -3759,11 +3759,18 @@
         const venue = document.createElement('div');
         venue.className = 'session-venue';
 
-        if (session.category === 'online' && session.zoomLink) {
-          venue.innerHTML = `📍 <a href="${session.zoomLink}" target="_blank" rel="noopener noreferrer">Join Zoom</a>`;
+        if (session.category === 'online') {
+          if (session.zoomLink === 'TBD') {
+            venue.innerHTML = `🖥️ Zoom Link: To be updated`;
+          } else if (session.zoomLink) {
+            venue.innerHTML = `🖥️ <a href="${session.zoomLink}" target="_blank" rel="noopener noreferrer">Join Zoom</a>`;
+          } else {
+            venue.innerHTML = '';
+          }
         } else if (session.location) {
           venue.innerHTML = `📍 ${session.location}`;
         }
+
 
         card.appendChild(header);
         card.appendChild(title);
