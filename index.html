@@ -780,11 +780,11 @@
     .week-nav__controls {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 1.5rem;
     }
 
     .week-nav__button {
-      width: 44px;
+      width: 5rem;
       height: 44px;
       border-radius: var(--border-radius-lg);
       border: none;
@@ -2272,6 +2272,47 @@
         margin-bottom: 80px;
       }
     }
+
+    /* Improved Focus States */
+    button:focus-visible,
+    .session-card:focus-visible,
+    .filter-button:focus-visible {
+      outline: 2px solid #007aff;
+      outline-offset: 2px;
+    }
+
+    /* Hover Refinements */
+    @media (hover: hover) {
+      .session-card:hover {
+        transform: translateX(4px) translateY(-1px);
+      }
+
+      .month-day:hover:not(.outside-conference) {
+        transform: translateY(-4px);
+      }
+    }
+
+    /* Print Styles */
+    @media print {
+
+      .week-nav__controls,
+      .filters,
+      .search-container,
+      .view-switcher,
+      .mobile-bottom-nav,
+      .theme-toggle {
+        display: none !important;
+      }
+
+      .week-grid {
+        grid-template-columns: repeat(7, 1fr) !important;
+        overflow: visible !important;
+      }
+
+      .session-card {
+        break-inside: avoid;
+      }
+    }
   </style>
 </head>
 
@@ -2313,7 +2354,7 @@
       </div>
       <div class="week-nav__controls">
         <button class="week-nav__button" id="prevWeek" aria-label="Previous week">
-          ← Previous
+          ← Prev
         </button>
         <button class="week-nav__button" id="todayButton" aria-label="Go to today">
           Today
