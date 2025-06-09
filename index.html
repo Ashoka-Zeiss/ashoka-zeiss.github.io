@@ -643,9 +643,9 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--space-xl);
+      margin-bottom: var(--space-lg);
       background-color: var(--color-bg);
-      padding: 24px 32px;
+      padding: 16px 24px;
       border-radius: var(--border-radius-xl);
       box-shadow: var(--shadow-lg);
       position: relative;
@@ -658,18 +658,20 @@
     }
 
     .week-nav__current {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       color: var(--color-text-primary);
       letter-spacing: -0.02em;
     }
 
+    /**
     .week-nav__stats {
       font-size: 14px;
       color: var(--color-text-secondary);
       display: flex;
       gap: var(--space-lg);
     }
+    **/
 
     /* Time Context Section */
     .time-context {
@@ -2350,7 +2352,7 @@
     <nav class="week-nav" role="navigation" aria-label="Week navigation">
       <div class="week-nav__info" id="currentWeek">
         <div class="week-nav__current">Loading...</div>
-        <div class="week-nav__stats"></div>
+        <!--<div class="week-nav__stats"></div>-->
       </div>
       <div class="week-nav__controls">
         <button class="week-nav__button" id="prevWeek" aria-label="Previous week">
@@ -3076,7 +3078,7 @@
         <div class="week-nav__current">
             ${dateRangeText}
         </div>
-        <div class="week-nav__stats">
+        <!--<div class="week-nav__stats">
             <div class="stat-item">
                 <span>${stats.total} sessions</span>
             </div>
@@ -3092,7 +3094,7 @@
                 <span class="stat-dot"></span>
                 <span>${stats.byCategory.offcampus}</span>
             </div>
-        </div>
+</div>-->
     `;
       };
 
