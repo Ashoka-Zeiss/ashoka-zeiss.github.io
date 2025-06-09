@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "conferenceStart": "2025-06-10",
+    "conferenceStart": "2025-06-9",
     "conferenceEnd": "2025-08-30",
     "timezone": "Asia/Kolkata"
   },
@@ -51,8 +51,8 @@
   "schedule": [
     {
       "id": "session-1",
-      "date": "2025-06-10",
-      "startTime": "15:00",
+      "date": "2025-06-09",
+      "startTime": "12:00",
       "endTime": "16:30",
       "title": "Microscopy Fundamentals",
       "instructor": "Prof. James Wilson",
@@ -68,9 +68,9 @@
     },
     {
       "id": "session-2",
-      "date": "2025-06-10",
-      "startTime": "10:00",
-      "endTime": "13:00",
+      "date": "2025-06-09",
+      "startTime": "13:00",
+      "endTime": "14:00",
       "title": "Sample Preparation Techniques",
       "instructor": "Maria Garcia",
       "instructorTitle": "Lab Manager",

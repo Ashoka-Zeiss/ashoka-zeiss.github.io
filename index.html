@@ -673,11 +673,33 @@
 
     /* Time Context Section */
     .time-context {
-      background-color: var(--color-surface);
+      /**background-color: var(--color-surface);
       border-radius: var(--border-radius);
       padding: var(--space-md);
-      margin-bottom: var(--space-lg);
+      margin-bottom: var(--space-lg);**/
+      background: linear-gradient(135deg, var(--color-surface) 0%, rgba(0, 122, 255, 0.05) 100%);
+      border-radius: var(--border-radius-lg);
+      padding: var(--space-lg);
+      margin-top: var(--space-xl);
+      margin-bottom: var(--space-xl);
+      box-shadow: var(--shadow-sm);
       display: none;
+    }
+
+    .happening-now {
+      /**background-color: var(--color-bg);
+      border-left: 3px solid var(--color-accent);
+      padding: var(--space-sm);
+      background: white;**/
+      border-left: 4px solid #007aff;
+      padding: var(--space-md);
+      border-radius: var(--border-radius);
+      margin-bottom: var(--space-md);
+      box-shadow: var(--shadow-sm);
+    }
+
+    [data-theme="dark"] .happening-now {
+      background: var(--color-surface);
     }
 
     .time-context.active {
@@ -691,14 +713,6 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-bottom: var(--space-sm);
-    }
-
-    .happening-now {
-      background-color: var(--color-bg);
-      border-left: 3px solid var(--color-accent);
-      padding: var(--space-sm);
-      border-radius: var(--border-radius);
-      margin-bottom: var(--space-md);
     }
 
     .happening-now__title {
@@ -2284,6 +2298,16 @@
         aria-label="Search sessions">
     </div>
 
+    <div class="view-switcher" role="tablist" aria-label="View options">
+      <button class="view-button active" role="tab" data-view="month" aria-selected="false">Month</button>
+      <button class="view-button" role="tab" data-view="week" aria-selected="true">Week</button>
+      <!--<button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>-->
+    </div>
+
+    <main class="week-grid" id="weekGrid" role="main">
+      <div class="loading">Loading schedule...</div>
+    </main>
+
     <div class="time-context" id="timeContext">
       <div class="happening-now" id="happeningNow" style="display: none;">
         <div class="happening-now__title">Happening Now</div>
@@ -2296,15 +2320,6 @@
       </div>
     </div>
 
-    <div class="view-switcher" role="tablist" aria-label="View options">
-      <button class="view-button active" role="tab" data-view="month" aria-selected="false">Month</button>
-      <button class="view-button" role="tab" data-view="week" aria-selected="true">Week</button>
-      <!--<button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>-->
-    </div>
-
-    <main class="week-grid" id="weekGrid" role="main">
-      <div class="loading">Loading schedule...</div>
-    </main>
   </div>
   <!-- Day Modal -->
   <div class="modal-overlay" id="dayModalOverlay">
