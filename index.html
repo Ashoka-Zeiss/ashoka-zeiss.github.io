@@ -1188,6 +1188,24 @@
       }
     }
 
+    /* Smooth Page Transitions */
+    .week-grid,
+    .month-grid {
+      animation: fadeInUp 400ms ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     /* Day Column with Time Indicators */
     .day-column {
       /**background-color: white;**/
@@ -1825,6 +1843,29 @@
       border: 2px dashed var(--color-border);
     }
 
+    .loading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-md);
+    }
+
+    .loading::before {
+      content: '';
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--color-border);
+      border-top-color: #007aff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     /* Mobile Optimizations */
     @media (max-width: 768px) {
       .container {
@@ -2040,6 +2081,28 @@
     .modal-overlay.active {
       display: flex;
       opacity: 1;
+    }
+
+    /* Enhanced Modal */
+    .modal-overlay {
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .modal-container {
+      animation: modalSlideIn 300ms ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95) translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     .modal-container {
@@ -2480,15 +2543,36 @@
           // Validate that we have actual sessions
           if (jsonData.schedule.length === 0) {
             // This might be intentional (no sessions yet), so handle gracefully
+            // This might be intentional (no sessions yet), so handle gracefully
+            weekGrid.className = ''; // Remove grid class to prevent overflow
             weekGrid.innerHTML = `
-  <div class="empty-state" style="grid-column: 1 / -1; padding: var(--space-2xl); text-align: center;">
-    <h3>No Sessions Scheduled Yet</h3>
-    <p>The conference schedule is being updated. Please check back later.</p>
-    <button class="week-nav__button" onclick="window.location.reload()" style="margin-top: var(--space-lg);">
-      Refresh Schedule
-    </button>
-  </div>
-`;
+              <div class="empty-state" style="
+                max-width: 600px;
+                margin: 0 auto;
+                padding: var(--space-2xl);
+                text-align: center;
+                background-color: var(--color-surface);
+                border-radius: var(--border-radius-lg);
+                box-shadow: var(--shadow-sm);
+              ">
+                <h3 style="margin-bottom: var(--space-md);">No Sessions Scheduled Yet</h3>
+                <p style="color: var(--color-text-secondary); margin-bottom: var(--space-lg);">
+                  The conference schedule is being updated. Please check back later.
+                </p>
+                <button class="week-nav__button" onclick="window.location.reload()" style="
+                  width: auto;
+                  padding: 12px 24px;
+                  background: #007aff;
+                  color: white;
+                  border: none;
+                  font-weight: 600;
+                  display: block;
+                  margin: 0 auto;
+                ">
+                  Refresh Schedule
+                </button>
+              </div>
+            `;
             return false;
           }
 
@@ -2524,49 +2608,63 @@
           }
 
           // Show comprehensive error UI
+          weekGrid.className = '';
           weekGrid.innerHTML = `
-<div class="error-state" style="
-  grid-column: 1 / -1;
-  padding: var(--space-2xl);
-  text-align: center;
-  background-color: var(--color-surface);
-  border-radius: var(--border-radius);
-  border-left: 4px solid var(--color-wet-lab);
-">
-  <div style="margin-bottom: var(--space-lg);">
-    <h3 style="color: var(--color-wet-lab); margin-bottom: var(--space-sm);">
-      ${errorMessage}
-    </h3>
-    <p style="color: var(--color-text-secondary); margin-bottom: var(--space-md);">
-      ${errorDetails}
-    </p>
-    <button class="week-nav__button" onclick="window.location.reload()">
-      🌐 Refresh Page
-    </button>
-  </div>
+            <div class="error-state" style="
+              grid-column: 1 / -1;
+              padding: var(--space-xl);
+              text-align: center;
+              background-color: var(--color-surface);
+              border-radius: var(--border-radius-lg);
+              border-left: 4px solid #ff3b30;
+              max-width: 600px;
+              margin: 0 auto;
+              box-shadow: var(--shadow-md);
+            ">
+              <div style="margin-bottom: var(--space-lg);">
+                <h3 style="color: #ff3b30; margin-bottom: var(--space-sm); font-size: 1.25rem;">
+                  ${errorMessage}
+                </h3>
+                <p style="color: var(--color-text-secondary); margin-bottom: var(--space-lg); line-height: 1.6;">
+                  ${errorDetails}
+                </p>
+                <button class="week-nav__button" onclick="window.location.reload()" style="
+                  width: auto;
+                  padding: 12px 24px;
+                  background: #007aff;
+                  color: white;
+                  border: none;
+                  font-weight: 600;
+                  margin: 0 auto;
+                ">
+                  🌐 Refresh Page
+                </button>
+              </div>
 
-  <details style="text-align: left; max-width: 600px; margin: 0 auto;">
-    <summary style="cursor: pointer; color: var(--color-text-secondary); font-size: 0.875rem;">
-      Technical Details
-    </summary>
-    <div style="
-      margin-top: var(--space-sm);
-      padding: var(--space-sm);
-      background-color: var(--color-bg);
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 0.75rem;
-      color: var(--color-text-muted);
-      word-break: break-all;
-    ">
-      Error: ${error.name || 'Unknown'}<br>
-      Message: ${error.message}<br>
-      Time: ${new Date().toLocaleString()}<br>
-      URL: ${window.location.href}
-    </div>
-  </details>
-</div>
-`;
+              <details style="text-align: left;">
+                <summary style="cursor: pointer; color: var(--color-text-secondary); font-size: 0.875rem; padding: var(--space-sm) 0;">
+                  Technical Details
+                </summary>
+                <div style="
+                  margin-top: var(--space-sm);
+                  padding: var(--space-md);
+                  background-color: var(--color-bg);
+                  border-radius: 8px;
+                  font-family: monospace;
+                  font-size: 0.75rem;
+                  color: var(--color-text-muted);
+                  word-break: break-word;
+                  overflow-wrap: break-word;
+                  white-space: pre-wrap;
+                ">
+            Error: ${error.name || 'Unknown'}
+            Message: ${error.message}
+            Time: ${new Date().toLocaleString()}
+            URL: ${window.location.href}
+                </div>
+              </details>
+            </div>
+          `;
 
           return false;
         }
