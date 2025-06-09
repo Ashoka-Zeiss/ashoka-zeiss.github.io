@@ -1669,26 +1669,34 @@
 
     /* Break Cards */
     .break-card {
-      background-color: var(--color-surface);
+      /**background-color: var(--color-surface);
       border: 1px solid rgba(156, 163, 175, 0.4);
+      transition: all var(--transition-base);**/
+      background-color: rgba(156, 163, 175, 0.1);
+      border: 1px solid rgba(156, 163, 175, 0.2);
       border-radius: var(--border-radius);
       padding: var(--space-sm) var(--space-md);
       margin: var(--space-xs) 0;
       position: relative;
-      transition: all var(--transition-base);
+      transition: all var(--transition-smooth);
       cursor: pointer;
+    }
+
+    .break-card:hover {
+      /**background-color: var(--color-surface-hover);
+      border-color: rgba(156, 163, 175, 0.6);**/
+      background-color: rgba(156, 163, 175, 0.15);
+      border-color: rgba(156, 163, 175, 0.3);
+    }
+
+    .break-card.expanded {
+      background-color: rgba(156, 163, 175, 0.15);
     }
 
     /* Remove the left accent bar completely */
     .break-card::before,
     .break-card::after {
       display: none;
-    }
-
-    /* Hover effect for feedback only */
-    .break-card:hover {
-      background-color: var(--color-surface-hover);
-      border-color: rgba(156, 163, 175, 0.6);
     }
 
     .break-header {
