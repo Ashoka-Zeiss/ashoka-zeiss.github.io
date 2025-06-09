@@ -2482,6 +2482,22 @@
         break-inside: avoid;
       }
     }
+
+    .week-nav__subtitle {
+      font-size: 1.3rem;
+      color: var(--color-text-secondary);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    /* Hide on mobile to save space */
+    @media (max-width: 768px) {
+      .week-nav__subtitle {
+        font-size: 1.3rem;
+        margin-top: 0.3rem;
+        margin-bottom: 0.9rem;
+      }
+    }
   </style>
 </head>
 
@@ -3313,8 +3329,11 @@
         }
 
         currentWeekEl.innerHTML = `
-        <div class="week-nav__current">
-            ${dateRangeText}
+        <div>
+          <div class="week-nav__current">
+              ${dateRangeText}
+          </div>
+          <div class="week-nav__subtitle">Course Schedule</div>
         </div>
         <!--<div class="week-nav__stats">
             <div class="stat-item">
