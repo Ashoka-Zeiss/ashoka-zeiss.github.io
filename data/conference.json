@@ -4,5 +4,23 @@
     "conferenceEnd": "2025-08-31",
     "timezone": "Asia/Kolkata"
   },
-  "schedule": []
+  "schedule": [
+    {
+      "id": "session-1",
+      "date": "2025-06-16",
+      "startTime": "12:00",
+      "endTime": "16:30",
+      "title": "Microscopy Fundamentals",
+      "instructor": "Prof. James Wilson",
+      "instructorTitle": "Director of Imaging Core",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 21,
+      "prerequisites": null,
+      "description": "Introduction to confocal microscopy principles, including point scanning, optical sectioning, and fluorescence basics.",
+      "location": "Building 3, Lecture Hall A",
+      "zoomLink": null
+    }
+  ]
 }
