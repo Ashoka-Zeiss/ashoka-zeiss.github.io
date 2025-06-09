@@ -884,7 +884,6 @@
     }
 
     /* View Switcher */
-    /* View Switcher - Redesigned */
     .view-switcher {
       display: flex;
       gap: 4px;
@@ -941,6 +940,7 @@
         width: 100%;
         justify-content: center;
         margin-bottom: var(--space-lg);
+        display: none;
       }
 
       .view-button {
@@ -2119,6 +2119,74 @@
         border-radius: 0;
       }
     }
+
+    /* Mobile Bottom Navigation */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--color-bg);
+      border-top: 1px solid var(--color-border);
+      padding: 8px 16px;
+      z-index: 100;
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-bottom-nav-inner {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      color: var(--color-text-secondary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      font-size: 12px;
+      text-decoration: none;
+    }
+
+    .bottom-nav-item:hover {
+      color: var(--color-text-primary);
+    }
+
+    .bottom-nav-item.active {
+      color: #007aff;
+    }
+
+    .bottom-nav-icon {
+      width: 24px;
+      height: 24px;
+      fill: currentColor;
+    }
+
+    /* Show on mobile only */
+    @media (max-width: 768px) {
+      .mobile-bottom-nav {
+        display: block;
+      }
+
+      /* Add padding to main container to account for bottom nav */
+      .container {
+        padding-bottom: 80px;
+      }
+
+      /* Adjust footer margin */
+      .main-footer {
+        margin-bottom: 80px;
+      }
+    }
   </style>
 </head>
 
@@ -2295,6 +2363,33 @@
       </div>
     </div>
   </footer>
+
+  <!-- Mobile Bottom Navigation -->
+  <nav class="mobile-bottom-nav">
+    <div class="mobile-bottom-nav-inner">
+      <button class="bottom-nav-item active" onclick='document.querySelector("[data-view=month]").click()'>
+        <svg class="bottom-nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z" />
+        </svg>
+        <span>Calendar</span>
+      </button>
+      <button class="bottom-nav-item" onclick='document.querySelector("[data-view=week]").click()'>
+        <svg class="bottom-nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
+        </svg>
+        <span>Week</span>
+      </button>
+      <button class="bottom-nav-item" onclick='document.getElementById("searchInput").focus(); window.scrollTo(0, 0);'>
+        <svg class="bottom-nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+        </svg>
+        <span>Search</span>
+      </button>
+    </div>
+  </nav>
 
   <script>
     // Sample JSON data structure (in production, this would be in a separate file)
@@ -3584,6 +3679,21 @@
         document.body.style.overflow = ''; // Restore scrolling
       };
 
+      // Update mobile nav active state
+      const updateMobileNavActiveState = () => {
+        const activeView = state.currentView;
+        document.querySelectorAll('.bottom-nav-item').forEach(item => {
+          item.classList.remove('active');
+        });
+
+        if (activeView === 'month') {
+          document.querySelector('.bottom-nav-item:nth-child(1)').classList.add('active');
+        } else if (activeView === 'week' || activeView === '3day') {
+          document.querySelector('.bottom-nav-item:nth-child(2)').classList.add('active');
+        }
+      };
+
+
       // Initialize
       const init = async () => {
         // Set initial theme
@@ -3659,6 +3769,7 @@
             updateViewButtons();
             renderView();
             updateNavigationButtons();
+            updateMobileNavActiveState();
           });
         });
 
