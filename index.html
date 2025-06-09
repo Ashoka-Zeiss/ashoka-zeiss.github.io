@@ -1012,6 +1012,52 @@
       height: 20px;
     }
 
+    /* Combined Controls Bar */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+      background-color: var(--color-bg);
+      padding: 16px 24px;
+      border-radius: var(--border-radius-xl);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .controls-bar .search-container {
+      flex: 0.4;
+      margin-bottom: 0;
+    }
+
+    .controls-bar .view-switcher {
+      flex: 0 0 auto;
+      margin-bottom: 0;
+    }
+
+    .controls-bar .filters {
+      flex: 0.4;
+      margin-bottom: 0;
+      justify-content: flex-end;
+    }
+
+    /* Mobile - Hide entire controls bar */
+    @media (max-width: 768px) {
+      .controls-bar {
+        display: none;
+      }
+
+      /* Keep search but move it to nav bar on mobile */
+      .week-nav {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .mobile-search {
+        width: 100%;
+        display: block;
+      }
+    }
+
     /* Month Grid */
     .month-grid {
       /**gap: 2px;
@@ -2367,6 +2413,7 @@
       </div>
     </nav>
 
+    <!--
     <div class="filters" role="group" aria-label="Filter sessions by category">
       <div class="filter-group">
         <button class="filter-button online active" data-category="online" aria-pressed="true">
@@ -2393,7 +2440,41 @@
     <div class="view-switcher" role="tablist" aria-label="View options">
       <button class="view-button active" role="tab" data-view="month" aria-selected="false">Month</button>
       <button class="view-button" role="tab" data-view="week" aria-selected="true">Week</button>
-      <!--<button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>-->
+      <button class="view-button" role="tab" data-view="3day" aria-selected="false">3 Days</button>
+    </div>
+    -->
+
+    <div class="controls-bar">
+      <!-- Search -->
+      <div class="search-container">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path
+            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+        </svg>
+        <input type="search" class="search-input" placeholder="Search sessions or instructors..." id="searchInput"
+          aria-label="Search sessions">
+      </div>
+
+      <!-- View Switcher -->
+      <div class="view-switcher" role="tablist" aria-label="View options">
+        <button class="view-button active" role="tab" data-view="month" aria-selected="false">Month</button>
+        <button class="view-button" role="tab" data-view="week" aria-selected="true">Week</button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters" role="group" aria-label="Filter sessions by category">
+        <div class="filter-group">
+          <button class="filter-button online active" data-category="online" aria-pressed="true">
+            Live Online
+          </button>
+          <button class="filter-button campus active" data-category="campus" aria-pressed="true">
+            Classroom
+          </button>
+          <button class="filter-button offcampus active" data-category="offcampus" aria-pressed="true">
+            Lab
+          </button>
+        </div>
+      </div>
     </div>
 
     <main class="week-grid" id="weekGrid" role="main">
