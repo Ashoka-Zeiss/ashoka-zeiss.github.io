@@ -2722,7 +2722,14 @@
   </nav>
 
   <script>
-    // Sample JSON data structure (in production, this would be in a separate file)
+    // Add this utility function at the top of your code
+    const getLocalDateString = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
     const CONFERENCE_DATA = null;
 
     // Namespace for our application
@@ -2834,10 +2841,15 @@
             return false;
           }
 
+          const parseLocalDate = (dateString) => {
+            const [year, month, day] = dateString.split('-').map(Number);
+            return new Date(year, month - 1, day); // month is 0-indexed in JS
+          };
+
           // Success - store data and continue
           state.conferenceData = jsonData;
-          CONFERENCE_START = new Date(state.conferenceData.metadata.conferenceStart);
-          CONFERENCE_END = new Date(state.conferenceData.metadata.conferenceEnd);
+          CONFERENCE_START = parseLocalDate(state.conferenceData.metadata.conferenceStart);
+          CONFERENCE_END = parseLocalDate(state.conferenceData.metadata.conferenceEnd);
           state.sessions = state.conferenceData.schedule;
 
           console.log(`✅ Loaded ${jsonData.schedule.length} sessions successfully`);
@@ -3096,7 +3108,7 @@
 
       const createMonthDay = (date) => {
         const dayCell = document.createElement('div');
-        const dateStr = date.toISOString().split('T')[0];
+        const dateStr = getLocalDateString(date);
         const isOutside = date < CONFERENCE_START || date > CONFERENCE_END;
 
         dayCell.className = `month-day ${isToday(date) ? 'today' : ''} ${isOutside ? 'outside-conference' : ''}`;
@@ -3243,7 +3255,7 @@
           monthEnd.setDate(0);
 
           for (let d = new Date(monthStart); d <= monthEnd; d.setDate(d.getDate() + 1)) {
-            const dateStr = d.toISOString().split('T')[0];
+            const dateStr = getLocalDateString(d);
             const daySessions = state.filteredSessions.filter(s => s.date === dateStr);
             stats.total += daySessions.length;
             daySessions.forEach(session => {
@@ -3253,7 +3265,7 @@
         } else {
           // Original logic for week and 3-day views
           dates.forEach(date => {
-            const dateStr = date.toISOString().split('T')[0];
+            const dateStr = getLocalDateString(date);
             const daySessions = state.filteredSessions.filter(s => s.date === dateStr);
 
             stats.total += daySessions.length;
@@ -3341,7 +3353,7 @@
         dayHeader.appendChild(dayMonth);
 
         // Session density indicator
-        const dateStr = date.toISOString().split('T')[0];
+        const dateStr = getLocalDateString(date);
         const daySessions = state.filteredSessions
           .filter(session => session.date === dateStr)
           .sort((a, b) => a.startTime.localeCompare(b.startTime));
@@ -3451,7 +3463,7 @@
         if (sessionCards.length === 0) return;
 
         // Get today's sessions
-        const todayStr = now.toISOString().split('T')[0];
+        const todayStr = getLocalDateString(now);
         const todaySessions = state.filteredSessions
           .filter(s => s.date === todayStr)
           .sort((a, b) => a.startTime.localeCompare(b.startTime));
@@ -3523,7 +3535,7 @@
       const highlightCurrentSession = () => {
         const now = new Date();
         const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-        const todayStr = now.toISOString().split('T')[0];
+        const todayStr = getLocalDateString(now);
 
         // Remove any existing highlights
         document.querySelectorAll('.session-card.current-session').forEach(card => {
@@ -3576,7 +3588,7 @@
           return;
         }
 
-        const todayStr = now.toISOString().split('T')[0];
+        const todayStr = getLocalDateString(now);
         const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
         // Get today's sessions
@@ -3993,7 +4005,7 @@
         const modalTitle = document.getElementById('modalTitle');
 
         // Format the date for display
-        const dateStr = date.toISOString().split('T')[0];
+        const dateStr = getLocalDateString(date);
         const formattedDate = date.toLocaleDateString('en-US', {
           weekday: 'long',
           year: 'numeric',
