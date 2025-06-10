@@ -1749,31 +1749,6 @@
       }
     }
 
-    /* Stagger animation for cards */
-    .session-card {
-      animation: slideIn 400ms ease-out backwards;
-    }
-
-    .session-card:nth-child(1) {
-      animation-delay: 0ms;
-    }
-
-    .session-card:nth-child(2) {
-      animation-delay: 50ms;
-    }
-
-    .session-card:nth-child(3) {
-      animation-delay: 100ms;
-    }
-
-    .session-card:nth-child(4) {
-      animation-delay: 150ms;
-    }
-
-    .session-card:nth-child(5) {
-      animation-delay: 200ms;
-    }
-
     /* Break Cards */
     .break-card {
       /**background-color: var(--color-surface);
@@ -1862,39 +1837,6 @@
 
     [data-theme="dark"] .break-card:hover {
       border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    /* Day column stagger */
-    .day-column {
-      animation: scaleIn 300ms ease-out backwards;
-    }
-
-    .day-column:nth-child(1) {
-      animation-delay: 0ms;
-    }
-
-    .day-column:nth-child(2) {
-      animation-delay: 50ms;
-    }
-
-    .day-column:nth-child(3) {
-      animation-delay: 100ms;
-    }
-
-    .day-column:nth-child(4) {
-      animation-delay: 150ms;
-    }
-
-    .day-column:nth-child(5) {
-      animation-delay: 200ms;
-    }
-
-    .day-column:nth-child(6) {
-      animation-delay: 250ms;
-    }
-
-    .day-column:nth-child(7) {
-      animation-delay: 300ms;
     }
 
     /* Loading State */
@@ -3102,8 +3044,8 @@
             break;
 
           default:
+            // Stats are calculated within renderWeek
             renderWeek();
-          // Stats are calculated within renderWeek
         }
 
         // Update indicators
@@ -3718,7 +3660,9 @@
           return createBreakCard(session);
         }
         const card = document.createElement('article');
-        card.className = `session-card ${session.category} ${state.expandedSessions.has(session.id) ? 'expanded' : ''}`;
+        const baseClasses = `session-card ${session.category} ${state.expandedSessions.has(session.id) ? 'expanded' : ''}`;
+        card.className = baseClasses;
+
         // FEAT: we don't need different lab types
         // card.setAttribute('data-lab-type', session.labType);
         card.setAttribute('data-session-id', session.id);
@@ -3889,18 +3833,10 @@
         } else {
           state.expandedSessions.add(sessionId);
         }
-        // Check if we're in a modal
-        const modal = document.getElementById('dayModalOverlay');
-        if (modal.classList.contains('active')) {
-          // We're in a modal, just toggle the class without re-rendering
-          const card = document.querySelector(`[data-session-id="${sessionId}"]`);
-          if (card) {
-            card.classList.toggle('expanded');
-            card.setAttribute('aria-expanded', card.classList.contains('expanded'));
-          }
-        } else {
-          // Regular view, re-render as before
-          renderView();
+        const card = document.querySelector(`[data-session-id="${sessionId}"]`);
+        if (card) {
+          card.classList.toggle('expanded');
+          card.setAttribute('aria-expanded', card.classList.contains('expanded'));
         }
       };
 
