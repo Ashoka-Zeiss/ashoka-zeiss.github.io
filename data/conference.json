@@ -258,7 +258,7 @@
       "prerequisites": null,
       "description": "To be updated",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/98486466775"
     },
     {
       "id": "session-16",
@@ -275,7 +275,7 @@
       "prerequisites": null,
       "description": "To be updated",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/98486466775"
     },
     {
       "id": "session-17",
@@ -292,7 +292,7 @@
       "prerequisites": null,
       "description": "To be updated",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/98486466775"
     },
     {
       "id": "session-18",
@@ -309,7 +309,7 @@
       "prerequisites": null,
       "description": "To be updated",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/98486466775"
     },
     {
       "id": "session-19",
@@ -326,7 +326,7 @@
       "prerequisites": null,
       "description": "To be updated",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/98486466775"
     },
     {
       "id": "session-20",
@@ -343,10 +343,10 @@
       "prerequisites": null,
       "description": "Introduction to digital images",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
-      "id": "session-20A",
+      "id": "session-21",
       "date": "2025-07-08",
       "startTime": "18:30",
       "endTime": "20:00",
@@ -360,10 +360,10 @@
       "prerequisites": null,
       "description": "Fundamentals of image processing",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
-      "id": "session-21",
+      "id": "session-22",
       "date": "2025-07-09",
       "startTime": "18:30",
       "endTime": "20:00",
@@ -377,10 +377,10 @@
       "prerequisites": null,
       "description": "Introduction to machine learning and image denoising, Basic image filtering",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
-      "id": "session-22",
+      "id": "session-23",
       "date": "2025-07-10",
       "startTime": "18:30",
       "endTime": "20:00",
@@ -394,10 +394,10 @@
       "prerequisites": null,
       "description": "Introduction to FIJI",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
-      "id": "session-23",
+      "id": "session-24",
       "date": "2025-07-11",
       "startTime": "18:30",
       "endTime": "20:00",
@@ -411,10 +411,10 @@
       "prerequisites": null,
       "description": "Advance image processing using FIJI",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
-      "id": "session-24",
+      "id": "session-25",
       "date": "2025-07-12",
       "startTime": "18:30",
       "endTime": "20:00",
@@ -428,10 +428,10 @@
       "prerequisites": null,
       "description": "Deep learning based methods for image segmentation",
       "location": null,
-      "zoomLink": "TBD"
+      "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
-      "id": "session-25",
+      "id": "session-25A",
       "date": "2025-07-17",
       "startTime": "10:00",
       "endTime": "13:00",
