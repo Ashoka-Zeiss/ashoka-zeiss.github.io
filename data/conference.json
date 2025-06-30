@@ -431,7 +431,7 @@
       "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
-      "id": "session-25A",
+      "id": "session-26",
       "date": "2025-07-17",
       "startTime": "10:00",
       "endTime": "13:00",
@@ -448,7 +448,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-26",
+      "id": "session-27",
       "date": "2025-07-17",
       "startTime": "14:00",
       "endTime": "17:00",
@@ -465,7 +465,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-27",
+      "id": "session-27A",
       "date": "2025-07-17",
       "startTime": "17:30",
       "endTime": "20:00",
@@ -486,7 +486,24 @@
       "date": "2025-07-18",
       "startTime": "10:00",
       "endTime": "13:00",
-      "title": "Confocal Microscopy Lab - Batch 3",
+      "title": "Confocal Microscopy Lab - Batch 3 & Cell Discoverer 7 Lab - Batch 1",
+      "instructor": "H Krishnamurthy",
+      "instructorTitle": "National Centre for Biological Sciences",
+      "category": "offcampus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "Lab training on confocal microscopy at Ashoka-ZEISS Core Imaging Facility",
+      "location": null,
+      "zoomLink": "TBD"
+    },
+    {
+      "id": "session-28A",
+      "date": "2025-07-18",
+      "startTime": "14:00",
+      "endTime": "17:00",
+      "title": "Confocal Microscopy Lab - Batch 4 & Cell Discoverer 7 Lab - Batch 2",
       "instructor": "H Krishnamurthy",
       "instructorTitle": "National Centre for Biological Sciences",
       "category": "offcampus",
@@ -501,26 +518,9 @@
     {
       "id": "session-29",
       "date": "2025-07-18",
-      "startTime": "14:00",
-      "endTime": "17:00",
-      "title": "Confocal Microscopy Lab - Batch 4",
-      "instructor": "H Krishnamurthy",
-      "instructorTitle": "National Centre for Biological Sciences",
-      "category": "offcampus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "Lab training on confocal microscopy at Ashoka-ZEISS Core Imaging Facility",
-      "location": null,
-      "zoomLink": "TBD"
-    },
-    {
-      "id": "session-30",
-      "date": "2025-07-18",
       "startTime": "17:30",
       "endTime": "20:00",
-      "title": "Extra Session - Confocal Microscopy Training -Lab",
+      "title": "Extra Session - Confocal Microscopy Training & Cell Discoverer 7 Lab - Batch 3",
       "instructor": "H Krishnamurthy",
       "instructorTitle": "National Centre for Biological Sciences",
       "category": "campus",
@@ -529,7 +529,7 @@
       "enrolled": 22,
       "prerequisites": null,
       "description": "Extra session for doubt clearing/hands-on training for Confocal Microscopy",
-      "location": "AC-01-LR-206",
+      "location": "AC-01-LR-206/",
       "zoomLink": null
     },
     {
@@ -563,6 +563,23 @@
       "enrolled": 22,
       "prerequisites": null,
       "description": "To be updated",
+      "location": "AC-01-LR-206",
+      "zoomLink": null
+    },
+    {
+      "id": "session-32A",
+      "date": "2025-07-19",
+      "startTime": "17:00",
+      "endTime": "20:00",
+      "title": "Extra Session - Confocal Microscopy Training & Cell Discoverer 7 Lab - Batch 4",
+      "instructor": "H Krishnamurthy",
+      "instructorTitle": "National Centre for Biological Sciences",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "Extra session for doubt clearing/hands-on training for Confocal Microscopy",
       "location": "AC-01-LR-206",
       "zoomLink": null
     },
