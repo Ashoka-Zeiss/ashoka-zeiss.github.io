@@ -433,7 +433,7 @@
     {
       "id": "session-26",
       "date": "2025-07-17",
-      "startTime": "9:30",
+      "startTime": "09:30",
       "endTime": "9:45",
       "title": "On-campus Session - Opening Address ",
       "instructor": "Prof. K VijayRaghavan",
@@ -450,7 +450,7 @@
     {
       "id": "session-27",
       "date": "2025-07-17",
-      "startTime": "9:45",
+      "startTime": "09:45",
       "endTime": "13:00",
       "title": "Confocal Microscopy Training - Common Session",
       "instructor": "H Krishnamurthy",
@@ -499,62 +499,62 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-30A",
+      "id": "session-30",
       "date": "2025-07-18",
-      "startTime": "10:00",
+      "startTime": "09:30",
       "endTime": "13:00",
-      "title": "Confocal Microscopy Lab - Batch 3 & Cell Discoverer 7 Lab - Batch 1",
+      "title": "Confocal Microscopy Hands-on",
       "instructor": "H Krishnamurthy & Jitender Verma",
-      "instructorTitle": "National Centre for Biological Sciences",
+      "instructorTitle": "National Centre for Biological Sciences & Ashoka University",
       "category": "offcampus",
       "labType": "theory",
       "capacity": 30,
       "enrolled": 22,
       "prerequisites": null,
-      "description": "Lab training on confocal microscopy at Ashoka-ZEISS Core Imaging Facility",
-      "location": "Ashoka-ZEISS Core Imaging Facility - TSB Lab B04",
+      "description": "Batch 1 - LSM 980, Batch 2 - LSM 900, Batch 3&4 - CD 7",
+      "location": "LSM 980 & CD7 at TSB Lab B04, LSM 900 at AC03 Basement Microscopy Facility",
       "zoomLink": "TBD"
     },
     {
-      "id": "session-30B",
+      "id": "session-30",
+      "date": "2025-07-18",
+      "startTime": "09:30",
+      "endTime": "13:00",
+      "title": "Confocal Microscopy Hands-on",
+      "instructor": "H Krishnamurthy & Jitender Verma",
+      "instructorTitle": "National Centre for Biological Sciences & Ashoka University",
+      "category": "offcampus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "Batch 1 - LSM 980, Batch 2 - LSM 900, Batch 3&4 - CD 7",
+      "location": "LSM 980 & CD7 at TSB Lab B04, LSM 900 at AC03 Basement Microscopy Facility",
+      "zoomLink": "TBD"
+    },
+  {
+      "id": "session-31",
       "date": "2025-07-18",
       "startTime": "14:00",
-      "endTime": "17:00",
-      "title": "Confocal Microscopy Lab - Batch 4 & Cell Discoverer 7 Lab - Batch 2",
+      "endTime": "17:30",
+      "title": "Confocal Microscopy Hands-on",
       "instructor": "H Krishnamurthy & Jitender Verma",
-      "instructorTitle": "National Centre for Biological Sciences",
+      "instructorTitle": "National Centre for Biological Sciences & Ashoka University",
       "category": "offcampus",
       "labType": "theory",
       "capacity": 30,
       "enrolled": 22,
       "prerequisites": null,
-      "description": "Lab training on confocal microscopy at Ashoka-ZEISS Core Imaging Facility",
-      "location": "Ashoka-ZEISS Core Imaging Facility - TSB Lab B04",
+      "description": "Batch 3 - LSM 980, Batch 4 - LSM 900, Batch 1&2 - CD 7",
+      "location": "LSM 980 & CD7 at TSB Lab B04, LSM 900 at AC03 Basement Microscopy Facility",
       "zoomLink": "TBD"
     },
     {
-      "id": "session-30C",
-      "date": "2025-07-18",
-      "startTime": "17:30",
-      "endTime": "20:00",
-      "title": "Cell Discoverer 7 Lab - Batch 3 & Doubt Clearing Session on Confocal Microscopy",
-      "instructor": "H Krishnamurthy & Jitender Verma",
-      "instructorTitle": "National Centre for Biological Sciences",
-      "category": "offcampus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "Extra session for doubt clearing/hands-on training for Confocal Microscopy",
-      "location": "Ashoka-ZEISS Core Imaging Facility - TSB Lab B04",
-      "zoomLink": null
-    },
-    {
-      "id": "session-31",
+      "id": "session-32",
       "date": "2025-07-19",
-      "startTime": "10:00",
-      "endTime": "13:00",
-      "title": "Training Lecture - Facility Management",
+      "startTime": "09:30",
+      "endTime": "11:30",
+      "title": "Recap Session - Confocal Imaging",
       "instructor": "H Krishnamurthy",
       "instructorTitle": "National Centre for Biological Sciences",
       "category": "campus",
@@ -562,12 +562,63 @@
       "capacity": 30,
       "enrolled": 22,
       "prerequisites": null,
-      "description": "Overview of facility management and standard processes and procedures",
-      "location": "AC-01-LR-206",
+      "description": "Recap and doubt clearing session on Confocal Microscopy",
+      "location": "AC-01-LR-205",
       "zoomLink": null
     },
     {
-      "id": "session-32",
+      "id": "session-33",
+      "date": "2025-07-19",
+      "startTime": "12:00",
+      "endTime": "13:00",
+      "title": "Common Lecture on Facility Management",
+      "instructor": "H Krishnamurthy",
+      "instructorTitle": "National Centre for Biological Sciences",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "Basics of Managing a Facility",
+      "location": "AC-01-LR-205",
+      "zoomLink": null
+    },
+    {
+      "id": "session-34",
+      "date": "2025-07-19",
+      "startTime": "14:00",
+      "endTime": "15:30",
+      "title": "Common Lecture on Basics of Flow Cytometry",
+      "instructor": "H Krishnamurthy",
+      "instructorTitle": "National Centre for Biological Sciences",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "To Be Updated",
+      "location": "AC-01-LR-205",
+      "zoomLink": null
+    },
+    {
+      "id": "session-35",
+      "date": "2025-07-19",
+      "startTime": "16:00",
+      "endTime": "17:00",
+      "title": "Common Lecture on Basics of Multicolour Cytometry",
+      "instructor": "H Krishnamurthy",
+      "instructorTitle": "National Centre for Biological Sciences",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "To Be Updated",
+      "location": "AC-01-LR-205",
+      "zoomLink": null
+    },
+    {
+      "id": "session-36",
       "date": "2025-07-19",
       "startTime": "14:00",
       "endTime": "16:00",
@@ -584,7 +635,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-32A",
+      "id": "session-37",
       "date": "2025-07-19",
       "startTime": "17:00",
       "endTime": "20:00",
@@ -601,7 +652,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-33",
+      "id": "session-38",
       "date": "2025-07-21",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -618,7 +669,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-34",
+      "id": "session-39",
       "date": "2025-07-21",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -635,7 +686,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-35",
+      "id": "session-40",
       "date": "2025-07-22",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -652,7 +703,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-36",
+      "id": "session-41",
       "date": "2025-07-22",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -669,7 +720,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-37",
+      "id": "session-42",
       "date": "2025-07-23",
       "startTime": "11:00",
       "endTime": "12:30",
@@ -686,7 +737,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-38",
+      "id": "session-43",
       "date": "2025-07-24",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -703,7 +754,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-39",
+      "id": "session-44",
       "date": "2025-07-24",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -720,7 +771,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-40",
+      "id": "session-45",
       "date": "2025-07-25",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -737,7 +788,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-41",
+      "id": "session-46",
       "date": "2025-07-25",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -754,7 +805,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-42",
+      "id": "session-47",
       "date": "2025-07-26",
       "startTime": "11:00",
       "endTime": "12:30",
@@ -771,7 +822,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-43",
+      "id": "session-48",
       "date": "2025-07-26",
       "startTime": "18:00",
       "endTime": "19:30",
@@ -788,7 +839,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-44",
+      "id": "session-49",
       "date": "2025-07-28",
       "startTime": "10:00",
       "endTime": "12:00",
@@ -805,7 +856,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-45",
+      "id": "session-50",
       "date": "2025-07-28",
       "startTime": "14:00",
       "endTime": "16:00",
@@ -822,7 +873,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-46",
+      "id": "session-51",
       "date": "2025-07-28",
       "startTime": "18:00",
       "endTime": "19:30",
@@ -839,7 +890,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-47",
+      "id": "session-52",
       "date": "2025-07-29",
       "startTime": "18:00",
       "endTime": "19:30",
@@ -856,7 +907,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-48",
+      "id": "session-53",
       "date": "2025-07-30",
       "startTime": "10:00",
       "endTime": "12:00",
@@ -873,7 +924,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-49",
+      "id": "session-54",
       "date": "2025-07-30",
       "startTime": "14:00",
       "endTime": "16:00",
@@ -890,7 +941,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-50",
+      "id": "session-55",
       "date": "2025-07-30",
       "startTime": "18:00",
       "endTime": "19:30",
@@ -907,7 +958,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-51",
+      "id": "session-56",
       "date": "2025-07-31",
       "startTime": "10:00",
       "endTime": "12:00",
@@ -924,7 +975,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-52",
+      "id": "session-57",
       "date": "2025-07-31",
       "startTime": "14:00",
       "endTime": "16:00",
@@ -941,7 +992,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-53",
+      "id": "session-58",
       "date": "2025-07-31",
       "startTime": "18:00",
       "endTime": "19:30",
@@ -958,7 +1009,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-54",
+      "id": "session-59",
       "date": "2025-08-01",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -975,7 +1026,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-55",
+      "id": "session-59A",
       "date": "2025-08-01",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -992,7 +1043,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-56",
+      "id": "session-59B",
       "date": "2025-08-02",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -1009,7 +1060,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-57",
+      "id": "session-59C",
       "date": "2025-08-02",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -1026,7 +1077,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-58",
+      "id": "session-59D",
       "date": "2025-08-03",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -1043,7 +1094,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-59",
+      "id": "session-59E",
       "date": "2025-08-03",
       "startTime": "14:00",
       "endTime": "16:30",
