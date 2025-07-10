@@ -515,23 +515,6 @@
       "location": "LSM 980 & CD7 at TSB Lab B04, LSM 900 at AC03 Basement Microscopy Facility",
       "zoomLink": "TBD"
     },
-    {
-      "id": "session-30",
-      "date": "2025-07-18",
-      "startTime": "09:30",
-      "endTime": "13:00",
-      "title": "Confocal Microscopy Hands-on",
-      "instructor": "H Krishnamurthy & Jitender Verma",
-      "instructorTitle": "National Centre for Biological Sciences & Ashoka University",
-      "category": "offcampus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "Batch 1 - LSM 980, Batch 2 - LSM 900, Batch 3&4 - CD 7",
-      "location": "LSM 980 & CD7 at TSB Lab B04, LSM 900 at AC03 Basement Microscopy Facility",
-      "zoomLink": "TBD"
-    },
   {
       "id": "session-31",
       "date": "2025-07-18",
