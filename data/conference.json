@@ -704,23 +704,6 @@
     },
     {
       "id": "session-44",
-      "date": "2025-07-23",
-      "startTime": "18:00",
-      "endTime": "20:00",
-      "title": "Confocal Microscopy Hands-on Cont. Batch 3 & 4",
-      "instructor": "Jitender Verma",
-      "instructorTitle": "Ashoka University",
-      "category": "offcampus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "Batch 3 - LSM 980, Batch 4 - CD 7",
-      "location": "LSM 980 & CD7 at TSB Lab B04",
-      "zoomLink": "TBD"
-    },
-    {
-      "id": "session-44",
       "date": "2025-07-24",
       "startTime": "10:00",
       "endTime": "12:30",
