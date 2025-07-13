@@ -671,22 +671,39 @@
     {
       "id": "session-42",
       "date": "2025-07-23",
-      "startTime": "11:00",
-      "endTime": "12:30",
-      "title": "Invited Talk on Advanced Research Microscopy",
-      "instructor": "Satyajit Mayor",
-      "instructorTitle": "University of Warwick",
-      "category": "campus",
+      "startTime": "10:00",
+      "endTime": "13:00",
+      "title": "Confocal Microscopy Hands-on Cont. Batch 1 & 2",
+      "instructor": "Jitender Verma",
+      "instructorTitle": "Ashoka University",
+      "category": "offcampus",
       "labType": "theory",
       "capacity": 30,
       "enrolled": 22,
       "prerequisites": null,
-      "description": "To be updated",
-      "location": "AC-01-LR-206",
-      "zoomLink": null
+      "description": "Batch 1 - LSM 980, Batch 2 - CD 7",
+      "location": "LSM 980 & CD7 at TSB Lab B04",
+      "zoomLink": "TBD"
     },
     {
       "id": "session-43",
+      "date": "2025-07-23",
+      "startTime": "14:00",
+      "endTime": "17:00",
+      "title": "Confocal Microscopy Hands-on Cont. Batch 3 & 4",
+      "instructor": "Jitender Verma",
+      "instructorTitle": "Ashoka University",
+      "category": "offcampus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "Batch 3 - LSM 980, Batch 4 - CD 7",
+      "location": "LSM 980 & CD7 at TSB Lab B04",
+      "zoomLink": "TBD"
+    },
+    {
+      "id": "session-44",
       "date": "2025-07-24",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -703,7 +720,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-44",
+      "id": "session-45",
       "date": "2025-07-24",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -720,7 +737,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-45",
+      "id": "session-46",
       "date": "2025-07-25",
       "startTime": "10:00",
       "endTime": "12:30",
@@ -737,7 +754,7 @@
       "zoomLink": "TBD"
     },
     {
-      "id": "session-46",
+      "id": "session-47",
       "date": "2025-07-25",
       "startTime": "14:00",
       "endTime": "16:30",
@@ -752,23 +769,6 @@
       "description": "To be updated",
       "location": null,
       "zoomLink": "TBD"
-    },
-    {
-      "id": "session-47",
-      "date": "2025-07-26",
-      "startTime": "11:00",
-      "endTime": "12:30",
-      "title": "Invited Talk on Advanced Research Microscopy",
-      "instructor": "To be updated",
-      "instructorTitle": "To be updated",
-      "category": "campus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "To be updated",
-      "location": "AC-01-LR-206",
-      "zoomLink": null
     },
     {
       "id": "session-48",
