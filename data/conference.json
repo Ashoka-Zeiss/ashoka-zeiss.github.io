@@ -431,6 +431,23 @@
       "zoomLink": "https://zoom.us/j/99732113872"
     },
     {
+      "id": "session-26A",
+      "date": "2025-07-17",
+      "startTime": "09:15",
+      "endTime": "09:30",
+      "title": "Group Photo Session",
+      "instructor": " with Prof. K VijayRaghavan",
+      "instructorTitle": "Ashoka University",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "To Be Updated",
+      "location": "Atrium - Admin Building",
+      "zoomLink": null
+    },
+    {
       "id": "session-26",
       "date": "2025-07-17",
       "startTime": "09:30",
@@ -445,23 +462,6 @@
       "prerequisites": null,
       "description": "To Be Updated",
       "location": "AC-01-LR-205",
-      "zoomLink": null
-    },
-    {
-      "id": "session-27A",
-      "date": "2025-07-17",
-      "startTime": "09:15",
-      "endTime": "09:45",
-      "title": "Group Photo Session and Opening Session",
-      "instructor": "Prof. K VijayRaghavan & Ashoka Team",
-      "instructorTitle": "Ashoka University",
-      "category": "campus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "To Be Updated",
-      "location": "Atrium & AC-01-LR-205",
       "zoomLink": null
     },
     {
