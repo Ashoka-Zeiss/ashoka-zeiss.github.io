@@ -958,23 +958,6 @@
       "zoomLink": null
     },
     {
-      "id": "session-58",
-      "date": "2025-07-31",
-      "startTime": "18:00",
-      "endTime": "19:30",
-      "title": "Microscopy for Clinical Applications - 5",
-      "instructor": "Rimlee Dutta",
-      "instructorTitle": "All India Institute Of Medical Sciences",
-      "category": "online",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "To be updated",
-      "location": null,
-      "zoomLink": "TBD"
-    },
-    {
       "id": "session-59",
       "date": "2025-08-01",
       "startTime": "10:00",
