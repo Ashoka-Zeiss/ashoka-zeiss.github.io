@@ -890,6 +890,23 @@
       "zoomLink": null
     },
     {
+      "id": "session-54A",
+      "date": "2025-07-29",
+      "startTime": "16:15",
+      "endTime": "17:15",
+      "title": "Team Meet and Coffee Session with Ambika",
+      "instructor": "Anupama Ambika Anilkumar",
+      "instructorTitle": "Dep. Director, Ashoka Global Research Alliances",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "To be updated",
+      "location": "To Be Updated",
+      "zoomLink": null
+    },
+    {
       "id": "session-55",
       "date": "2025-07-29",
       "startTime": "18:00",
