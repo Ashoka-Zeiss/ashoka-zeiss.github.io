@@ -1536,24 +1536,7 @@
       "zoomLink": null
     },
     {
-      "id": "session-91",
-      "date": "2025-08-25",
-      "startTime": "10:00",
-      "endTime": "17:00",
-      "title": "Light Microscopy Lab Training - Cell Discoverer 7, Elyra 7, Lattice Lightsheet 7",
-      "instructor": "ZEISS India Team",
-      "instructorTitle": "ZEISS India",
-      "category": "offcampus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "To be updated",
-      "location": "Lab B04, Ashoka ZEISS Core Imaging Facility",
-      "zoomLink": null
-    },
-       {
-      "id": "session-91A",
+      "id": "session-83",
       "date": "2025-08-26",
       "startTime": "10:00",
       "endTime": "11:30",
