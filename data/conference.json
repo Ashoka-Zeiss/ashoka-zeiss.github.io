@@ -1146,6 +1146,23 @@
     },
     {
       "id": "session-65",
+      "date": "2025-08-08",
+      "startTime": "10:00",
+      "endTime": "16:00",
+      "title": "Exploring the Microcosmos with Foldscopes",
+      "instructor": "Anupma Harshal",
+      "instructorTitle": "Kotak Education Foundation",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "To be updated",
+      "location": "AC-01-LR-206",
+      "zoomLink": null
+    },
+    {
+      "id": "session-65",
       "date": "2025-08-09",
       "startTime": "10:00",
       "endTime": "12:30",
