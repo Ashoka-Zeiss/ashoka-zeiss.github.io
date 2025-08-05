@@ -1213,23 +1213,6 @@
       "zoomLink": null
     },
     {
-      "id": "session-67",
-      "date": "2025-08-11",
-      "startTime": "14:00",
-      "endTime": "16:30",
-      "title": "Morphometric Analysis - 2",
-      "instructor": "Dipendra Nath Basu",
-      "instructorTitle": "Ashoka University",
-      "category": "campus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "To be updated",
-      "location": "AC-02-LR-107",
-      "zoomLink": null
-    },
-    {
       "id": "session-69",
       "date": "2025-08-12",
       "startTime": "10:00",
