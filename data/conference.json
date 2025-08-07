@@ -1606,8 +1606,8 @@
     {
       "id": "session-92",
       "date": "2025-08-27",
-      "startTime": "10:00",
-      "endTime": "12:30",
+      "startTime": "18:30",
+      "endTime": "21:00",
       "title": "Virtual Lab Training - ZEISS Axioscan",
       "instructor": "ZEISS Germany Team",
       "instructorTitle": "ZEISS Germany",
@@ -1617,31 +1617,14 @@
       "enrolled": 22,
       "prerequisites": null,
       "description": "To be updated",
-      "location": "AC-01-LR-206",
-      "zoomLink": null
-    },
-    {
-      "id": "session-93",
-      "date": "2025-08-27",
-      "startTime": "14:00",
-      "endTime": "16:30",
-      "title": "Virtual Lab Training - ZEISS Axioscan",
-      "instructor": "ZEISS Germany Team",
-      "instructorTitle": "ZEISS Germany",
-      "category": "offcampus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "To be updated",
-      "location": "AC-01-LR-206",
-      "zoomLink": null
+      "location": null,
+      "zoomLink": "https://zoom.us/j/92882935723"
     },
     {
       "id": "session-94",
       "date": "2025-08-28",
-      "startTime": "10:00",
-      "endTime": "12:30",
+      "startTime": "18:30",
+      "endTime": "21:00",
       "title": "Virtual Lab Training - ZEISS Axioscan",
       "instructor": "ZEISS Germany Team",
       "instructorTitle": "ZEISS Germany",
@@ -1651,8 +1634,8 @@
       "enrolled": 22,
       "prerequisites": null,
       "description": "To be updated",
-      "location": "AC-01-LR-206",
-      "zoomLink": null
+      "location": null,
+      "zoomLink": "https://zoom.us/j/92882935723"
     },
     {
       "id": "session-95",
