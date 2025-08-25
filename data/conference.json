@@ -1793,8 +1793,8 @@
     {
       "id": "session-83C",
       "date": "2025-08-26",
-      "startTime": "10:00",
-      "endTime": "11:30",
+      "startTime": "10:30",
+      "endTime": "12:00",
       "title": "Invited Talk - Microscopy",
       "instructor": "Gunjan Mehta",
       "instructorTitle": "Indian Institute of Technology Hyderabad",
@@ -1804,7 +1804,7 @@
       "enrolled": 22,
       "prerequisites": null,
       "description": "To be updated",
-      "location": "AC-01-LR-206",
+      "location": "G Ramachandran Hall TSB Ground Floor - 100 Seater",
       "zoomLink": null
     },
            {
@@ -1821,7 +1821,7 @@
       "enrolled": 22,
       "prerequisites": null,
       "description": "To be updated",
-      "location": "AC-01-LR-206",
+      "location": "G Ramachandran Hall TSB Ground Floor - 100 Seater",
       "zoomLink": null
     },
     {
