@@ -1807,7 +1807,7 @@
       "location": "G Ramachandran Hall TSB Ground Floor - 100 Seater",
       "zoomLink": null
     },
-           {
+    {
       "id": "session-91B",
       "date": "2025-08-26",
       "startTime": "14:00",
@@ -1815,6 +1815,23 @@
       "title": "Interaction Session on Microscopy & Career Prospectives",
       "instructor": "Gunjan Mehta",
       "instructorTitle": "Indian Institute of Technology Hyderabad",
+      "category": "campus",
+      "labType": "theory",
+      "capacity": 30,
+      "enrolled": 22,
+      "prerequisites": null,
+      "description": "To be updated",
+      "location": "G Ramachandran Hall TSB Ground Floor - 100 Seater",
+      "zoomLink": null
+    },
+     {
+      "id": "session-91C",
+      "date": "2025-08-26",
+      "startTime": "15:45",
+      "endTime": "14:45",
+      "title": "Team Meeting with High Tea and Feedback Session with Ambika",
+      "instructor": "Anupama Ambika",
+      "instructorTitle": "Ashoka University",
       "category": "campus",
       "labType": "theory",
       "capacity": 30,
