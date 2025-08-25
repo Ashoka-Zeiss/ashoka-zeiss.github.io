@@ -1876,28 +1876,11 @@
       "zoomLink": "https://zoom.us/j/92882935723"
     },
     {
-      "id": "session-95",
-      "date": "2025-08-28",
-      "startTime": "14:00",
-      "endTime": "16:30",
-      "title": "Virtual Lab Training - ZEISS Axioscan",
-      "instructor": "ZEISS Germany Team",
-      "instructorTitle": "ZEISS Germany",
-      "category": "offcampus",
-      "labType": "theory",
-      "capacity": 30,
-      "enrolled": 22,
-      "prerequisites": null,
-      "description": "To be updated",
-      "location": "AC-01-LR-206",
-      "zoomLink": null
-    },
-    {
       "id": "session-96",
       "date": "2025-08-30",
-      "startTime": "11:00",
-      "endTime": "13:30",
-      "title": "Closing Meeting",
+      "startTime": "10:30",
+      "endTime": "12:30",
+      "title": "PCAM 2025 Final Evaluation",
       "instructor": "Programme Management Team",
       "instructorTitle": "Ashoka University",
       "category": "campus",
@@ -1906,7 +1889,7 @@
       "enrolled": 22,
       "prerequisites": null,
       "description": "To be updated",
-      "location": "AC-02-LR-107",
+      "location": "AC-01-LR-205",
       "zoomLink": null
     }
   ]
