@@ -2518,7 +2518,7 @@
           ← Prev
         </button>
         <button class="week-nav__button" id="todayButton" aria-label="Go to today">
-          Today
+          Day 1
         </button>
         <button class="week-nav__button" id="nextWeek" aria-label="Next week">
           → Next
@@ -2987,7 +2987,7 @@
       };
 
       const isToday = (date) => {
-        const today = new Date();
+        const today = new Date(CONFERENCE_START); // Archival mode: use conference start as "today"
         return date.toDateString() === today.toDateString();
       };
 
@@ -3304,7 +3304,7 @@
             break;
 
           case '3day':
-            const today = new Date();
+            const today = new Date(CONFERENCE_START); // Archival mode: use conference start
             const endDate = new Date(today);
             endDate.setDate(today.getDate() + 2);
             dateRangeText = `${formatDate(today).split(',')[1].trim()} - ${formatDate(endDate).split(',')[1].trim()}`;
@@ -3454,7 +3454,7 @@
       };
 
       const updateTimeIndicator = () => {
-        const now = new Date();
+        const now = new Date(`${CONFERENCE_START}T11:00:00+05:30`); // Archival mode: use conference start time
         const currentHour = now.getHours();
         const currentMinutes = now.getMinutes();
         const currentTimeStr = `${currentHour.toString().padStart(2, '0')}:${currentMinutes.toString().padStart(2, '0')}`;
@@ -3548,7 +3548,7 @@
       };
 
       const highlightCurrentSession = () => {
-        const now = new Date();
+        const now = new Date(`${CONFERENCE_START}T11:00:00+05:30`); // Archival mode: use conference start date
         const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         const todayStr = getLocalDateString(now);
 
@@ -3594,7 +3594,7 @@
       };
 
       const updateTimeContext = () => {
-        const now = new Date();
+        const now = new Date(`${CONFERENCE_START}T11:00:00+05:30`); // Archival mode: use conference start date
         const timeContext = document.getElementById('timeContext');
 
         // Only show during conference dates
@@ -3960,13 +3960,12 @@
       };
 
       const handleTodayButton = () => {
-        const today = new Date();
+        const today = new Date(CONFERENCE_START); // Archival mode: navigate to conference start
 
         let targetDate;
         if (today >= CONFERENCE_START && today <= CONFERENCE_END) {
           targetDate = today;
         } else {
-          // TODO: add helpful error that today's date is outside conference margins
           targetDate = today;
         }
 
@@ -4133,15 +4132,13 @@
           return;
         }
 
-        // TODO: add error handling when today is outside conference boundaries
-        // Set initial date to today (regardless of conference dates)
-        const today = new Date();
+        // Archival mode: Set initial date to conference start
+        const today = new Date(CONFERENCE_START);
         if (state.currentView === 'month') {
-          // For month view, set to first day of current month
-          // state.currentWeekStart = new Date(today.getFullYear(), today.getMonth(), 1);
+          // For month view, set to first day of conference start month
           state.currentWeekStart = getWeekStart(today);
         } else {
-          // For week view, set to start of current week
+          // For week view, set to start of conference start week
           state.currentWeekStart = getWeekStart(today);
         }
 
